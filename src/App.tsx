@@ -49,7 +49,7 @@ function DiscordIcon({ size = 16, color = 'currentColor' }: { size?: number; col
 
 function FooterWordmark({ theme }: { theme: 'dark'|'light' }) {
   const t = th(theme)
-  const blueSet = new Set(['b', 'p'])
+  const blueSet = new Set(['n', 'u'])
   const word = 'blueprint otu'
   return (
     <div style={{
@@ -73,17 +73,21 @@ function FooterWordmark({ theme }: { theme: 'dark'|'light' }) {
 }
 
 export default function App() {
-  const [page, setPage]     = useState<Page>('home')
+ const [page, setPage] = useState<Page>(() => {
+  const saved = sessionStorage.getItem('bpotu_page')
+  return (saved as Page) || 'home'
+})
   const [pageKey, setPK]    = useState(0)
   const [loaded, setLoaded] = useState(false)
   const { theme, toggle }   = useTheme()
   const t = th(theme)
 
   const go = useCallback((p: Page) => {
-    setPage(p)
-    setPK(k => k + 1)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
+  setPage(p)
+  setPK(k => k + 1)
+  sessionStorage.setItem('bpotu_page', p)
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}, [])
 
   const pages: Record<Page, React.ReactElement> = {
     home:       <Home       go={go}  theme={theme} />,

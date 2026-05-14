@@ -17,13 +17,11 @@ function playGlowSound() {
     osc.connect(gain)
     gain.connect(ctx.destination)
     osc.type = 'sine'
-    osc.frequency.setValueAtTime(440, ctx.currentTime)
-    osc.frequency.exponentialRampToValueAtTime(660, ctx.currentTime + 0.18)
-    gain.gain.setValueAtTime(0, ctx.currentTime)
-    gain.gain.linearRampToValueAtTime(0.07, ctx.currentTime + 0.04)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35)
+    osc.frequency.setValueAtTime(40, ctx.currentTime)
+    gain.gain.setValueAtTime(0.03, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02)
     osc.start(ctx.currentTime)
-    osc.stop(ctx.currentTime + 0.35)
+    osc.stop(ctx.currentTime + 0.02)
   } catch (_) {}
 }
 
@@ -85,12 +83,27 @@ export default function Home({ go, theme }: Props) {
     <div>
       {/* HERO */}
       <section ref={heroRef} style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', padding: '100px 52px 80px' }}>
+
+        {/* Background logo — bottom right, faint */}
+        <img
+          src="/logo.webp"
+          alt=""
+          style={{
+            position: 'absolute', bottom: -60, right: -60,
+            width: 480, height: 480,
+            objectFit: 'contain', opacity: 0.04,
+            filter: 'none', pointerEvents: 'none',
+            zIndex: 0,
+          }}
+        />
+
         <motion.div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none', y: gridY,
+          position: 'absolute', inset: 0, pointerEvents: 'none', y: gridY, zIndex: 0,
           backgroundImage: `repeating-linear-gradient(90deg,rgba(26,86,240,0.045) 0,rgba(26,86,240,0.045) 1px,transparent 1px,transparent 80px),
             repeating-linear-gradient(0deg,rgba(26,86,240,0.045) 0,rgba(26,86,240,0.045) 1px,transparent 1px,transparent 80px)`,
         }} />
-        <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: 520, height: 520, borderRadius: '50%', background: `radial-gradient(circle,rgba(26,86,240,0.08) 0%,transparent 65%)`, pointerEvents: 'none' }} />
+
+        <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: 520, height: 520, borderRadius: '50%', background: `radial-gradient(circle,rgba(26,86,240,0.08) 0%,transparent 65%)`, pointerEvents: 'none', zIndex: 0 }} />
 
         <div style={{ position: 'relative', zIndex: 2, width: '100%' }}>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16,1,0.3,1] }}>
@@ -127,7 +140,7 @@ export default function Home({ go, theme }: Props) {
               </button>
             </div>
             <div style={{ fontFamily: F.mono, fontSize: '0.6rem', color: t.fg3, marginTop: 10 }}>
-              applications open fall 2025 · first cohort fall 2026
+              applications open fall 2026 · first cohort fall 2026
             </div>
           </motion.div>
         </div>
@@ -153,12 +166,14 @@ export default function Home({ go, theme }: Props) {
       {/* COMING SOON BAND */}
       <section style={{ background: C.blue, padding: '80px 52px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(-55deg,transparent,transparent 28px,rgba(255,255,255,0.03) 28px,rgba(255,255,255,0.03) 29px)' }} />
+        {/* Background logo inside band — centered, white tint */}
+        <img src="/logo.webp" alt="" style={{ position: 'absolute', right: '5%', top: '50%', transform: 'translateY(-50%)', width: 220, height: 220, objectFit: 'contain', opacity: 0.06, filter: 'brightness(10)', pointerEvents: 'none' }} />
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 32 }}>
           <div>
             <div style={{ fontFamily: F.mono, fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)', marginBottom: 16 }}>First cohort</div>
             <div style={{ fontFamily: F.clash, fontWeight: 700, fontSize: 'clamp(2.8rem,6vw,5.5rem)', lineHeight: 0.95, letterSpacing: '-0.04em', color: '#fff' }}>Fall 2026.</div>
             <div style={{ fontFamily: F.mono, fontSize: '0.9rem', color: 'rgba(255,255,255,0.72)', lineHeight: 1.7, maxWidth: 480, marginTop: 18, fontWeight: 400 }}>
-              Blueprint OTU is building its founding team right now. Applications open fall 2025. Be part of something from the very beginning.
+              Blueprint OTU is building its founding team right now. Applications open fall 2026. Be part of something from the very beginning.
             </div>
           </div>
           <button onClick={() => go('apply')}
@@ -171,7 +186,9 @@ export default function Home({ go, theme }: Props) {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: '96px 52px', textAlign: 'center' }}>
+      <section style={{ padding: '96px 52px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        {/* Background logo — left side, faint */}
+        <img src="/logo.webp" alt="" style={{ position: 'absolute', left: -40, bottom: -40, width: 300, height: 300, objectFit: 'contain', opacity: 0.03, pointerEvents: 'none' }} />
         <Reveal><div style={{ fontFamily: F.mono, fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: t.fg3, marginBottom: 22 }}>open applications</div></Reveal>
         <Reveal delay={80}>
           <WordStagger text="Build something that actually matters." style={{ fontFamily: F.syne, fontWeight: 800, fontSize: 'clamp(2rem,4.5vw,3.8rem)', lineHeight: 1.0, letterSpacing: '-0.03em', color: t.fg, marginBottom: 20, display: 'block', textAlign: 'center' }} />
