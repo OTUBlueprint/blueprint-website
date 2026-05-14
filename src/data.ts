@@ -9,77 +9,35 @@ export const NAV_PAGES: { key: string; label: string }[] = [
   { key: 'nonprofits', label: 'Nonprofits' },
   { key: 'sponsors',   label: 'Sponsors'   },
   { key: 'apply',      label: 'Apply'      },
+  { key: 'social',     label: 'Social'     },
 ]
 
 export const EVENTS: BpEvent[] = [
-  {
-    id: 1, title: 'Hack for Impact',
-    date: 'Feb 2026', time: 'TBD',
-    loc: 'TBD', type: 'flagship',
-    desc: 'Our first annual hackathon. Student teams build real tech solutions for Durham Region nonprofits. Open to every program at OTU.',
-    cap: 100, status: 'placeholder',
-  },
-  {
-    id: 2, title: 'Tech for Good Panel',
-    date: 'Nov 2026', time: 'TBD',
-    loc: 'TBD', type: 'panel',
-    desc: '90 minutes with OTU professors, Durham nonprofit leaders, and people working in social impact tech. Open to the whole campus.',
-    cap: 80, status: 'placeholder',
-  },
-  {
-    id: 3, title: 'Blueprint Bytes Workshop Series',
-    date: 'Oct 2026', time: 'TBD',
-    loc: 'TBD', type: 'workshop',
-    desc: 'Monthly skill workshops covering React, Figma, Git, agile, and client communication. No experience required.',
-    cap: 40, status: 'placeholder',
-  },
-  {
-    id: 4, title: 'Fall Info Session',
-    date: 'Sept 2026', time: 'TBD',
-    loc: 'TBD', type: 'social',
-    desc: 'Learn what Blueprint is, meet the team, and find out how to apply. Food provided. Come as you are.',
-    cap: 60, status: 'upcoming',
-  },
-  {
-    id: 5, title: 'NPO Showcase Night',
-    date: 'Apr 2027', time: 'TBD',
-    loc: 'TBD', type: 'flagship',
-    desc: 'End of year demo night. Each team presents their delivered software to nonprofit clients, sponsors, faculty, and campus.',
-    cap: 120, status: 'placeholder',
-  },
-  {
-    id: 6, title: 'Coffee Chats with Industry',
-    date: 'Monthly', time: 'TBD',
-    loc: 'TBD', type: 'social',
-    desc: 'Monthly 60-minute session with one industry professional. 15 Blueprint members. No slides, just real talk.',
-    cap: 15, status: 'placeholder',
-  },
+  { id:1, title:'Hack for Impact',                  date:'November 1st, 2026', time:'TBD', loc:'TBD', type:'flagship', desc:'Our first annual hackathon. Student teams build real tech solutions for Durham Region nonprofits. Open to every program at OTU.',                                                              cap:100, status:'upcoming'     },
+  { id:2, title:'Tech for Good Panel',              date:'Nov 2026',           time:'TBD', loc:'TBD', type:'panel',    desc:'90 minutes with OTU professors, Durham nonprofit leaders, and people working in social impact tech. Open to the whole campus.',                                                              cap:80,  status:'placeholder'  },
+  { id:3, title:'Blueprint Bytes Workshop Series',  date:'Oct 2026',           time:'TBD', loc:'TBD', type:'workshop', desc:'Monthly skill workshops covering React, Figma, Git, agile, and client communication. No experience required.',                                                                             cap:40,  status:'placeholder'  },
+  { id:4, title:'Fall Info Session',                date:'Sept 2026',          time:'TBD', loc:'TBD', type:'social',   desc:'Learn what Blueprint is, meet the team, and find out how to apply. Food provided. Come as you are.',                                                                                        cap:60,  status:'upcoming'     },
+  { id:5, title:'NPO Showcase Night',               date:'Apr 2027',           time:'TBD', loc:'TBD', type:'flagship', desc:'End of year demo night. Each team presents their delivered software to nonprofit clients, sponsors, faculty, and campus.',                                                                  cap:120, status:'placeholder'  },
+  { id:6, title:'Coffee Chats with Industry',       date:'Monthly',            time:'TBD', loc:'TBD', type:'social',   desc:'Monthly 60-minute session with one industry professional. 15 Blueprint members. No slides, just real talk.',                                                                               cap:15,  status:'placeholder'  },
 ]
 
 export const TEAM: Member[] = [
-  { id: 1, name: 'Jun Bin Cheng',   role: 'Founder',           program: 'Ontario Tech University', year: '', initials: 'J', isExec: true },
-  { id: 2, name: 'Valerie Ekeigwe', role: 'President',         program: 'Ontario Tech University', year: '', initials: 'V', isExec: true },
-  { id: 3, name: 'VP of Engineering', role: 'VP of Engineering', program: 'Ontario Tech University', year: '', initials: 'E', isExec: true },
-  { id: 4, name: 'VP of Design',    role: 'VP of Design',      program: 'Ontario Tech University', year: '', initials: 'D', isExec: true },
+  { id:1, name:'Jun Bin Cheng',     role:'Founder',           program:'Ontario Tech University', year:'', initials:'J', isExec:true },
+  { id:2, name:'Valerie Ekeigwe',   role:'President',         program:'Ontario Tech University', year:'', initials:'V', isExec:true },
+  { id:3, name:'VP of Engineering', role:'VP of Engineering', program:'Ontario Tech University', year:'', initials:'E', isExec:true },
+  { id:4, name:'VP of Design',      role:'VP of Design',      program:'Ontario Tech University', year:'', initials:'D', isExec:true },
 ]
 
 export const TICKER = [
-  'Technology for Good',
-  'Ontario Tech University',
-  'Durham Region',
-  'Pro Bono Software',
-  'Student Developers',
-  'Community Impact',
-  'Hack for Impact',
-  'Applications Open May 20th',
-  'Zero Cost to Nonprofits',
-  'First Cohort Fall 2026',
+  'Technology for Good', 'Ontario Tech University', 'Durham Region',
+  'Pro Bono Software', 'Student Developers', 'Community Impact',
+  'Hack for Impact', 'Applications Open May 20th',
+  'Zero Cost to Nonprofits', 'First Cohort Fall 2026',
 ]
 
 export const OPEN_ROLES = [
   {
-    title: 'Developer',
-    count: 'Multiple',
+    title: 'Developer', count: 'Multiple',
     desc: 'Build real web and mobile applications for nonprofit clients alongside a team of developers and designers.',
     skills: ['React or Vue', 'TypeScript', 'Git and GitHub', 'Node.js or similar backend'],
     responsibilities: [
@@ -99,8 +57,7 @@ export const OPEN_ROLES = [
     ],
   },
   {
-    title: 'Product Designer',
-    count: '2 spots',
+    title: 'Product Designer', count: 'Multiple',
     desc: 'Own the full UX and UI of a product used by real community members. Work directly with developers and clients.',
     skills: ['Figma', 'User research', 'Prototyping', 'Design systems'],
     responsibilities: [
@@ -120,8 +77,7 @@ export const OPEN_ROLES = [
     ],
   },
   {
-    title: 'Illustrator / Motion Designer',
-    count: '3 spots',
+    title: 'Illustrator / Motion Designer', count: '3 spots',
     desc: 'Create visual assets, motion graphics, and illustrations that bring Blueprint brand and projects to life.',
     skills: ['After Effects or similar', 'Illustration', 'Brand storytelling', 'Figma'],
     responsibilities: [
@@ -140,8 +96,7 @@ export const OPEN_ROLES = [
     ],
   },
   {
-    title: 'Social Media Manager',
-    count: '1 spot',
+    title: 'Social Media Manager', count: '1 spot',
     desc: 'Own Blueprint OTU Instagram, LinkedIn, and all social content. Build our presence on campus and beyond.',
     skills: ['Content creation', 'Instagram and LinkedIn', 'Photography', 'Copywriting'],
     responsibilities: [
@@ -161,8 +116,7 @@ export const OPEN_ROLES = [
     ],
   },
   {
-    title: 'Finance Officer',
-    count: '2 spots',
+    title: 'Finance Officer', count: '2 spots',
     desc: 'Manage club finances, track budgets, handle reimbursements, and support sponsorship financial reporting.',
     skills: ['Budgeting basics', 'Excel or Google Sheets', 'Attention to detail', 'Organizational skills'],
     responsibilities: [
@@ -182,8 +136,7 @@ export const OPEN_ROLES = [
     ],
   },
   {
-    title: 'Event Coordinator',
-    count: '2 spots',
+    title: 'Event Coordinator', count: '2 spots',
     desc: 'Plan and execute Blueprint events including workshops, panels, and Hack for Impact. You run the show.',
     skills: ['Event planning', 'Logistics', 'Communication', 'Creative thinking'],
     responsibilities: [
@@ -203,8 +156,7 @@ export const OPEN_ROLES = [
     ],
   },
   {
-    title: 'Sponsorship Associate',
-    count: '1 spot',
+    title: 'Sponsorship Associate', count: 'Multiple',
     desc: 'Build relationships with companies, reach out to sponsors, and secure partnerships that fund what we do.',
     skills: ['Outreach and communication', 'Professional writing', 'Research', 'Persistence'],
     responsibilities: [
@@ -226,29 +178,29 @@ export const OPEN_ROLES = [
 ]
 
 export const UPCOMING_ROLES = [
-  { title: 'VP Technology',               desc: 'Oversee all technical project teams and set engineering standards across Blueprint OTU.' },
-  { title: 'Workshop Lead',               desc: 'Design and run our Blueprint Bytes workshop series for students across OTU.' },
-  { title: 'Community Outreach Lead',     desc: 'Build relationships with Durham Region nonprofits and community organizations.' },
-  { title: 'Photographer / Content Creator', desc: 'Capture Blueprint events, project work, and team culture in photos and video.' },
-  { title: 'Project Manager',             desc: 'Lead a client-facing project team from scoping through to final delivery each semester.' },
+  { title:'VP Technology',               desc:'Oversee all technical project teams and set engineering standards across Blueprint OTU.' },
+  { title:'Workshop Lead',               desc:'Design and run our Blueprint Bytes workshop series for students across OTU.' },
+  { title:'Community Outreach Lead',     desc:'Build relationships with Durham Region nonprofits and community organizations.' },
+  { title:'Photographer / Content Creator', desc:'Capture Blueprint events, project work, and team culture in photos and video.' },
+  { title:'Project Manager',             desc:'Lead a client-facing project team from scoping through to final delivery each semester.' },
 ]
 
 export const PROCESS_STEPS = [
-  { n: '01', title: 'Apply Online',  desc: 'Fill out the application form. It takes about 15 minutes. No portfolio required, just your honest answers.' },
-  { n: '02', title: 'Review Period', desc: 'Our team reviews every application within 7 days. We look for drive and curiosity, not credentials.' },
-  { n: '03', title: 'Interview',     desc: 'A short 20-minute conversation with two Blueprint members. No technical tests. Just a real chat.' },
-  { n: '04', title: 'Decision',      desc: 'You hear back within 5 business days. Accepted members receive an onboarding package and meeting invite.' },
+  { n:'01', title:'Apply Online',  desc:'Fill out the application form. It takes about 15 minutes. No portfolio required, just your honest answers.' },
+  { n:'02', title:'Review Period', desc:'Our team reviews every application within 7 days. We look for drive and curiosity, not credentials.' },
+  { n:'03', title:'Interview',     desc:'A short 20-minute conversation with two Blueprint members. No technical tests. Just a real chat.' },
+  { n:'04', title:'Decision',      desc:'You hear back within 5 business days. Accepted members receive an onboarding package and meeting invite.' },
 ]
 
 export const FAQ = [
-  { q: 'Who can apply to Blueprint OTU?',          a: 'Any Ontario Tech University student regardless of program. We have developers, designers, business students, and everyone in between.' },
-  { q: 'Do I need prior experience?',              a: 'No. We care about your drive and curiosity far more than your resume. Many of our best members had zero professional experience when they joined.' },
-  { q: 'What is the time commitment?',             a: 'Most roles require 8 to 12 hours per week. Project leads commit 15 to 20 hours. We are transparent about this upfront so you can make an informed decision.' },
-  { q: 'What tech stack does Blueprint use?',      a: 'We primarily build with React, TypeScript, Node.js, and PostgreSQL. Designers use Figma. Project managers use Notion and Linear. You do not need to know all of these before joining.' },
-  { q: 'When does recruitment open?',              a: 'Applications open May 20th and close July 1st. We recruit again every January. Keep an eye on our Instagram for updates.' },
-  { q: 'How does the interview work?',             a: 'It is a 20-minute video call with two Blueprint members. We will ask about your interest in tech for good, your experience so far, and what you hope to build. No surprise technical questions.' },
-  { q: 'Can I apply to multiple roles?',           a: 'Yes. You can select up to two roles in your application. Just be specific about which one is your first preference.' },
-  { q: 'What happens after I am accepted?',        a: 'You receive a welcome package with everything you need. Then an onboarding session, a team assignment, and your first sprint within two weeks.' },
-  { q: 'Is Blueprint OTU affiliated with Cal Blueprint?', a: 'We are inspired by and connected to the global Blueprint network founded at UC Berkeley. We operate independently as the Ontario Tech University chapter.' },
-  { q: 'I am not in Computer Science. Can I still apply?', a: 'Absolutely. Blueprint needs designers, communicators, finance minds, event planners, and storytellers just as much as developers. Your program is not a barrier.' },
+  { q:'Who can apply to Blueprint OTU?',           a:'Any Ontario Tech University student regardless of program. We have developers, designers, business students, and everyone in between.' },
+  { q:'Do I need prior experience?',               a:'No. We care about your drive and curiosity far more than your resume. Many of our best members had zero professional experience when they joined.' },
+  { q:'What is the time commitment?',              a:'Most roles require 8 to 12 hours per week. Project leads commit 15 to 20 hours. We are transparent about this upfront so you can make an informed decision.' },
+  { q:'What tech stack does Blueprint use?',       a:'We primarily build with React, TypeScript, Node.js, and PostgreSQL. Designers use Figma. Project managers use Notion and Linear. You do not need to know all of these before joining.' },
+  { q:'When does recruitment open?',               a:'Applications open May 20th and close July 1st. We recruit again every January. Keep an eye on our Instagram for updates.' },
+  { q:'How does the interview work?',              a:'It is a 20-minute video call with two Blueprint members. We will ask about your interest in tech for good, your experience so far, and what you hope to build. No surprise technical questions.' },
+  { q:'Can I apply to multiple roles?',            a:'Yes. You can select up to two roles in your application. Just be specific about which one is your first preference.' },
+  { q:'What happens after I am accepted?',         a:'You receive a welcome package with everything you need. Then an onboarding session, a team assignment, and your first sprint within two weeks.' },
+  { q:'Is Blueprint OTU affiliated with Cal Blueprint?', a:'We are inspired by and connected to the global Blueprint network founded at UC Berkeley. We operate independently as the Ontario Tech University chapter.' },
+  { q:'I am not in Computer Science. Can I still apply?', a:'Absolutely. Blueprint needs designers, communicators, finance minds, event planners, and storytellers just as much as developers. Your program is not a barrier.' },
 ]

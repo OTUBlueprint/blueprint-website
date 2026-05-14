@@ -74,20 +74,13 @@ export default function App() {
     social:     <Social             theme={theme} />,
   }
 
-  const linkStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 10,
-    textDecoration: 'none',
-    color: t.fg2,
-    transition: 'color 0.2s',
-  }
+  function linkHoverOn(e: React.MouseEvent<HTMLAnchorElement>)  { e.currentTarget.style.color = C.blue }
+  function linkHoverOff(e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.color = t.fg2  }
 
-  function hoverOn(e: React.MouseEvent<HTMLAnchorElement>) {
-    e.currentTarget.style.color = C.blue
-  }
-  function hoverOff(e: React.MouseEvent<HTMLAnchorElement>) {
-    e.currentTarget.style.color = t.fg2
+  const linkStyle: React.CSSProperties = {
+    display: 'flex', alignItems: 'center', gap: 10,
+    textDecoration: 'none', color: t.fg2,
+    transition: 'color 0.2s',
   }
 
   return (
@@ -165,21 +158,18 @@ export default function App() {
                   Follow us
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <a href="https://www.instagram.com/otublueprint/" target="_blank" rel="noreferrer" style={linkStyle} onMouseEnter={hoverOn} onMouseLeave={hoverOff}>
+                  <a href="https://www.instagram.com/otublueprint/" target="_blank" rel="noreferrer" style={linkStyle} onMouseEnter={linkHoverOn} onMouseLeave={linkHoverOff}>
                     <IgIcon size={16} color="currentColor" />
                     <span style={{ fontFamily: F.mono, fontSize: '0.74rem', fontWeight: 400 }}>@otublueprint</span>
                   </a>
-                  <a href="https://www.linkedin.com/company/otu-blueprint/" target="_blank" rel="noreferrer" style={linkStyle} onMouseEnter={hoverOn} onMouseLeave={hoverOff}>
+                  <a href="https://www.linkedin.com/company/otu-blueprint/" target="_blank" rel="noreferrer" style={linkStyle} onMouseEnter={linkHoverOn} onMouseLeave={linkHoverOff}>
                     <LiIcon size={16} color="currentColor" />
                     <span style={{ fontFamily: F.mono, fontSize: '0.74rem', fontWeight: 400 }}>Blueprint OTU</span>
                   </a>
-                  <a href="https://discord.gg/nxRccCVU" target="_blank" rel="noreferrer" style={linkStyle} onMouseEnter={hoverOn} onMouseLeave={hoverOff}>
+                  <a href="https://discord.gg/nxRccCVU" target="_blank" rel="noreferrer" style={linkStyle} onMouseEnter={linkHoverOn} onMouseLeave={linkHoverOff}>
                     <DiscordIcon size={16} color="currentColor" />
                     <span style={{ fontFamily: F.mono, fontSize: '0.74rem', fontWeight: 400 }}>Join our Discord</span>
                   </a>
-                </div>
-                <div style={{ marginTop: 20, fontFamily: F.mono, fontSize: '0.7rem', color: t.fg3, fontWeight: 400 }}>
-                  blueprintotech@gmail.com
                 </div>
               </div>
             </div>
