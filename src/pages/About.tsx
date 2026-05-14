@@ -93,7 +93,7 @@ function BgLogo({ style }: { style?: React.CSSProperties }) {
           style={{
             width: '100%', height: '100%',
             objectFit: 'contain',
-            opacity: light.active ? 0.22 : 0.05,
+            opacity: light.active ? 0.32 : 0.12,
             filter: light.active
               ? 'grayscale(1) brightness(2.6) contrast(1.2) saturate(0)'
               : 'none',
@@ -271,7 +271,7 @@ export default function About({ theme }: Props) {
   return (
     <div style={{ position: 'relative', overflow: 'hidden' }}>
 
-      <BgLogo style={{ top: -60, left: -80, width: 420, height: 420 }} />
+     <BgLogo style={{ top: -80, left: -100, width: 600, height: 600 }} />
 
       {/* HERO */}
       <section style={{ padding: '100px 52px 80px', position: 'relative', zIndex: 2 }}>
