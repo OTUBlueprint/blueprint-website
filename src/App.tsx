@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import Cursor from './components/Cursor'
 import Loader from './components/Loader'
 import Nav from './components/Nav'
@@ -6,8 +7,7 @@ import PageWipe from './components/PageWipe'
 import ThemeToggle from './components/ThemeToggle'
 import { useTheme } from './hooks'
 import { C, F, th } from './tokens'
-import { NAV_PAGES } from './data'
-import type { Page } from './types'
+import type { Theme } from './types'
 
 import Home       from './pages/Home'
 import About      from './pages/About'
@@ -18,6 +18,18 @@ import Apply      from './pages/Apply'
 import Sponsors   from './pages/Sponsors'
 import Nonprofits from './pages/Nonprofits'
 import Social     from './pages/Social'
+
+const NAV_LINKS = [
+  { path: '/',           label: 'Home'       },
+  { path: '/about',      label: 'About'      },
+  { path: '/projects',   label: 'Projects'   },
+  { path: '/events',     label: 'Events'     },
+  { path: '/team',       label: 'Team'       },
+  { path: '/nonprofits', label: 'Nonprofits' },
+  { path: '/sponsors',   label: 'Sponsors'   },
+  { path: '/apply',      label: 'Apply'      },
+  { path: '/social',     label: 'Social'     },
+]
 
 function IgIcon({ size = 16, color = 'currentColor' }: { size?: number; color?: string }) {
   return (
@@ -47,7 +59,15 @@ function DiscordIcon({ size = 16, color = 'currentColor' }: { size?: number; col
   )
 }
 
-function FooterWordmark({ theme }: { theme: 'dark'|'light' }) {
+function GhIcon({ size = 16, color = 'currentColor' }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
+    </svg>
+  )
+}
+
+function FooterWordmark({ theme }: { theme: Theme }) {
   const t = th(theme)
   const blueSet = new Set(['n', 'u'])
   const word = 'blueprint otu'
@@ -72,34 +92,18 @@ function FooterWordmark({ theme }: { theme: 'dark'|'light' }) {
   )
 }
 
-export default function App() {
- const [page, setPage] = useState<Page>(() => {
-  const saved = sessionStorage.getItem('bpotu_page')
-  return (saved as Page) || 'home'
-})
-  const [pageKey, setPK]    = useState(0)
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
+
+function AppInner() {
   const [loaded, setLoaded] = useState(false)
   const { theme, toggle }   = useTheme()
+  const location = useLocation()
+  const navigate = useNavigate()
   const t = th(theme)
-
-  const go = useCallback((p: Page) => {
-  setPage(p)
-  setPK(k => k + 1)
-  sessionStorage.setItem('bpotu_page', p)
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}, [])
-
-  const pages: Record<Page, React.ReactElement> = {
-    home:       <Home       go={go}  theme={theme} />,
-    about:      <About              theme={theme} />,
-    projects:   <Projects   go={go}  theme={theme} />,
-    events:     <Events             theme={theme} />,
-    team:       <Team       go={go}  theme={theme} />,
-    apply:      <Apply              theme={theme} />,
-    sponsors:   <Sponsors           theme={theme} />,
-    nonprofits: <Nonprofits         theme={theme} />,
-    social:     <Social             theme={theme} />,
-  }
 
   function linkHoverOn(e: React.MouseEvent<HTMLAnchorElement>)  { e.currentTarget.style.color = C.blue }
   function linkHoverOff(e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.color = t.fg2  }
@@ -122,20 +126,33 @@ export default function App() {
 
       {loaded && (
         <>
-          <Nav page={page} go={go} theme={theme} />
-
-          <div style={{ position: 'fixed', bottom: 28, left: 52, zIndex: 500 }}>
-            <ThemeToggle theme={theme} toggle={toggle} />
-          </div>
+          <Nav
+            navLinks={NAV_LINKS}
+            currentPath={location.pathname}
+            theme={theme}
+            toggle={toggle}
+          />
 
           <main style={{ paddingTop: 58, minHeight: '100vh', background: t.bg, transition: 'background 0.45s' }}>
-            <PageWipe pageKey={`${page}-${pageKey}`}>
-              {pages[page]}
+            <PageWipe pageKey={location.pathname}>
+              <Routes>
+                <Route path="/"           element={<Home       theme={theme} />} />
+                <Route path="/about"      element={<About      theme={theme} />} />
+                <Route path="/projects"   element={<Projects   theme={theme} />} />
+                <Route path="/events"     element={<Events     theme={theme} />} />
+                <Route path="/team"       element={<Team       theme={theme} />} />
+                <Route path="/apply"      element={<Apply      theme={theme} />} />
+                <Route path="/sponsors"   element={<Sponsors   theme={theme} />} />
+                <Route path="/nonprofits" element={<Nonprofits theme={theme} />} />
+                <Route path="/social"     element={<Social     theme={theme} />} />
+                <Route path="*"           element={<Home       theme={theme} />} />
+              </Routes>
             </PageWipe>
           </main>
 
           <footer style={{ background: t.bg, transition: 'background 0.45s', borderTop: `1px solid ${t.bord}` }}>
             <div style={{ padding: '52px 52px 32px', display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: 40 }}>
+
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
                   <img src="/logo.webp" alt="Blueprint OTU" style={{ width: 28, height: 28, objectFit: 'contain' }} />
@@ -149,8 +166,8 @@ export default function App() {
               <div>
                 <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: t.fg3, marginBottom: 14 }}>Pages</div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px 16px' }}>
-                  {NAV_PAGES.map(n => (
-                    <button key={n.key} onClick={() => go(n.key as Page)}
+                  {NAV_LINKS.map(n => (
+                    <button key={n.path} onClick={() => navigate(n.path)}
                       style={{ background: 'none', border: 'none', fontFamily: F.mono, fontSize: '0.7rem', fontWeight: 400, color: t.fg2, textAlign: 'left', padding: '2px 0', transition: 'color 0.2s' }}
                       onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = C.blue}
                       onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = t.fg2}>
@@ -175,6 +192,10 @@ export default function App() {
                     <DiscordIcon size={15} color="currentColor" />
                     <span style={{ fontFamily: F.mono, fontSize: '0.72rem', fontWeight: 400 }}>Join our Discord</span>
                   </a>
+                  <a href="https://github.com/OTUBlueprint" target="_blank" rel="noreferrer" style={linkStyle} onMouseEnter={linkHoverOn} onMouseLeave={linkHoverOff}>
+                    <GhIcon size={15} color="currentColor" />
+                    <span style={{ fontFamily: F.mono, fontSize: '0.72rem', fontWeight: 400 }}>GitHub</span>
+                  </a>
                 </div>
               </div>
             </div>
@@ -195,5 +216,14 @@ export default function App() {
         </>
       )}
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <AppInner />
+    </BrowserRouter>
   )
 }

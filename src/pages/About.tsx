@@ -6,6 +6,7 @@ import Reveal from '../components/Reveal'
 import LineReveal from '../components/LineReveal'
 import Eyebrow from '../components/Eyebrow'
 
+import type { NavigateFunction } from 'react-router-dom'
 interface Props { theme: 'dark'|'light' }
 
 let globalCtx: AudioContext | null = null
