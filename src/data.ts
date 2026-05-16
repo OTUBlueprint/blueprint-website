@@ -12,7 +12,7 @@ export const EVENTS: BpEvent[] = [
 export const TEAM: Member[] = [
   { id:1, name:'Jun Bin Cheng',   role:'Founder',           program:'Ontario Tech University', year:'', initials:'J', isExec:true },
   { id:2, name:'Valerie Ekeigwe', role:'President',         program:'Ontario Tech University', year:'', initials:'V', isExec:true },
-  { id:3, name:'Kumayl',          role:'Vice President',    program:'Ontario Tech University', year:'', initials:'K', isExec:true },
+  { id:3, name:'Kumayl Zafar',          role:'Vice President',    program:'Ontario Tech University', year:'', initials:'K', isExec:true },
 ]
 
 export const TEAMS = [
@@ -23,7 +23,7 @@ export const TEAMS = [
     tagline: "Shape Blueprint OTU's brand, content, and storytelling across social media, events, recruitment, and digital platforms.",
     experience: 'Beginner-Friendly to Experience Required',
     status: 'Open Now',
-    commitment: '12 hrs/week minimum',
+    commitment: '8 hrs/week minimum',
     skills: ['Social media strategy','Instagram','LinkedIn','Content planning','Canva','Figma','Photography','Video editing','Branding','Graphic design','Copywriting'],
     what: "Shape Blueprint OTU's brand, content, and storytelling across social media, events, recruitment, and digital platforms.",
     roles: [
@@ -141,7 +141,7 @@ export const TEAMS = [
     tagline: "Grow Blueprint OTU's campus presence, member experience, recruitment pipeline, and external relationships.",
     experience: 'Experience Preferred to Experience Required',
     status: 'Open Now',
-    commitment: '12 hrs/week minimum',
+    commitment: '8 hrs/week minimum',
     skills: ['Community building','Member engagement','Recruitment','Partnerships','Sponsorship outreach','Workshop planning','Public speaking','Professional communication'],
     what: "Grow Blueprint OTU's campus presence, member experience, recruitment pipeline, and external relationships.",
     roles: [
@@ -256,7 +256,7 @@ export const TEAMS = [
     tagline: 'Build real software and digital products for nonprofits, community partners, and social impact projects.',
     experience: 'Experience Preferred to Experience Required',
     status: 'Open Now',
-    commitment: '12 hrs/week minimum',
+    commitment: '8 hrs/week minimum',
     skills: ['React','Vue','TypeScript','JavaScript','Git / GitHub','APIs','Databases','Backend development','Figma','UI / UX','AI / ML','Mobile development','Project management'],
     what: 'Build real software and digital products for nonprofits, community partners, and social impact projects.',
     roles: [
@@ -427,7 +427,7 @@ export const TEAMS = [
     tagline: 'Lead the systems, strategy, operations, partnerships, projects, marketing, and execution behind Blueprint OTU.',
     experience: 'Experience Required',
     status: 'Open Now',
-    commitment: '12 hrs/week minimum',
+    commitment: '8 hrs/week minimum',
     skills: ['Leadership','Team management','Operations','Communication','Sponsorships','Event planning','Project oversight','Marketing strategy','Website management','Documentation'],
     what: 'Lead the systems, strategy, operations, partnerships, projects, marketing, and execution behind Blueprint OTU.',
     roles: [
@@ -609,7 +609,7 @@ export const PROCESS_STEPS = [
 export const FAQ = [
   { q:'Do I need experience?',                   a:'It depends on the role. Creative and community roles are beginner-friendly. Technical and executive roles require demonstrated ability. But across every role, we care more about your drive and honesty than your resume.' },
   { q:'Do I need to meet every qualification?',  a:'No. Qualifications are guidelines, not gates. If you have some of the listed skills and genuine motivation to learn the rest, we want to hear from you. Apply and tell us your story.' },
-  { q:'How much time is required?',              a:'All selected members commit approximately 12 hours per week minimum. Some roles, especially executive and project-facing ones, may require more during busy periods.' },
+  { q:'How much time is required?',              a:'All selected members commit approximately 8 hours per week minimum. Some roles, especially executive and project-facing ones, may require more during busy periods.' },
   { q:'Can first-years apply?',                  a:'Yes. First-years are welcome if you are reliable, motivated, and ready to contribute consistently from day one.' },
   { q:'Can non-engineering students apply?',     a:'Absolutely. Blueprint needs designers, communicators, event planners, storytellers, and strategists just as much as developers. Your program is not a barrier.' },
   { q:'Can I apply to more than one role?',      a:'Yes. Select your strongest fit as your primary role, then choose a secondary team or role if you are genuinely open to being considered elsewhere.' },
