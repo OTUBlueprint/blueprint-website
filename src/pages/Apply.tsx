@@ -38,6 +38,7 @@ export default function Apply({ theme }: Props) {
   const [activeTeam, setActiveTeam]   = useState<string | null>(null)
   const [activeRole, setActiveRole]   = useState<string>('')
   const [expandedTeam, setExpanded]   = useState<string | null>(null)
+  const [activeTeamObj, setActiveTeamObj] = useState<typeof TEAMS[0] | null>(null)
 
   // Mailing list modal
   const [showMail, setShowMail]       = useState(false)
@@ -85,11 +86,18 @@ export default function Apply({ theme }: Props) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
- function openForm(role: string, teamId?: string) {
-  if (teamId) setActiveTeam(teamId)
+function openForm(role: string, teamId?: string) {
+  const id = teamId || activeTeam
+  const foundTeam = TEAMS.find(team => team.id === id)
+  if (foundTeam) {
+    setActiveTeamObj(foundTeam)
+    setActiveTeam(id || '')
+  }
   setActiveRole(role)
-  setView('form')
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  setTimeout(() => {
+    setView('form')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, 0)
 }
 
   function goBack() {
@@ -136,7 +144,7 @@ export default function Apply({ theme }: Props) {
     setMailSent(true)
   }
 
-  const currentTeam = TEAMS.find(t => t.id === activeTeam)
+  const currentTeam = activeTeamObj || TEAMS.find(team => team.id === activeTeam)
 
   const expColor: Record<string, string> = {
     'Beginner-Friendly':    '#4ade80',
@@ -406,7 +414,7 @@ export default function Apply({ theme }: Props) {
                               <div>
                                 {team.roles.map((role, ri) => (
                                   <motion.div
-                                    key={role}
+                                    key={role.title}
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3, ease: [0.16,1,0.3,1], delay: ri * 0.05 }}
@@ -418,11 +426,11 @@ export default function Apply({ theme }: Props) {
                                       style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 52px', gap: 24 }}
                                     >
                                       <div>
-                                        <div style={{ fontFamily: F.syne, fontWeight: 800, fontSize: '1.1rem', color: t.fg, marginBottom: 4 }}>{role}</div>
+                                        <div style={{ fontFamily: F.syne, fontWeight: 800, fontSize: '1.1rem', color: t.fg, marginBottom: 4 }}>{role.title}</div>
                                         <div style={{ fontFamily: F.mono, fontSize: '0.7rem', color: t.fg3 }}>{team.name} · {team.commitment}</div>
                                       </div>
                                       <button
-                                        onClick={() => openForm(role, team.id)}
+                                        onClick={() => openForm(role.title, team.id)}
                                         style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.1em', textTransform: 'uppercase', background: C.blue, color: '#fff', padding: '9px 20px', borderRadius: 8, border: 'none', transition: 'background 0.2s, transform 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}
                                         onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = C.blueMid; el.style.transform = 'translateY(-1px)' }}
                                         onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = C.blue; el.style.transform = '' }}
@@ -569,7 +577,7 @@ export default function Apply({ theme }: Props) {
               <div style={{ borderTop: `1px solid ${t.bord}`, marginTop: 20 }}>
                 {currentTeam.roles.map((role, i) => (
                   <motion.div
-                    key={role}
+                    key={role.title}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, ease: [0.16,1,0.3,1], delay: i * 0.06 }}
@@ -581,7 +589,7 @@ export default function Apply({ theme }: Props) {
                       style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 0', gap: 24 }}
                     >
                       <div>
-                        <div style={{ fontFamily: F.syne, fontWeight: 800, fontSize: 'clamp(1.1rem,2.5vw,1.6rem)', color: t.fg, marginBottom: 6, letterSpacing: '-0.02em' }}>{role}</div>
+                        <div style={{ fontFamily: F.syne, fontWeight: 800, fontSize: 'clamp(1.1rem,2.5vw,1.6rem)', color: t.fg, marginBottom: 6, letterSpacing: '-0.02em' }}>{role.title}</div>
                         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                           <span style={{ fontFamily: F.mono, fontSize: '0.62rem', color: t.fg3 }}>{currentTeam.name}</span>
                           <span style={{ width: 3, height: 3, borderRadius: '50%', background: t.fg3, display: 'inline-block' }} />
@@ -591,7 +599,7 @@ export default function Apply({ theme }: Props) {
                         </div>
                       </div>
                       <button
-                        onClick={() => openForm(role, currentTeam?.id)}
+                        onClick={() => openForm(role.title, currentTeam?.id)}
                         style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', background: C.blue, color: '#fff', padding: '11px 24px', borderRadius: 9, border: 'none', transition: 'background 0.2s, transform 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}
                         onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = C.blueMid; el.style.transform = 'translateY(-1px)' }}
                         onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = C.blue; el.style.transform = '' }}
