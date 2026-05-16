@@ -13,7 +13,7 @@ export default function Projects({ theme }: Props) {
   const dark = theme === 'dark'
 
   return (
-    <div style={{ padding: '100px 52px 80px', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div style={{ padding: '100px 52px 80px', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
       <img src="/logo.webp" alt="" style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 500, height: 500, objectFit: 'contain', opacity: 0.04, pointerEvents: 'none', zIndex: 0 }} />
       <div style={{ position: 'relative', zIndex: 1 }}>
         <Reveal><Eyebrow dark={dark}>Projects</Eyebrow></Reveal>
@@ -42,18 +42,6 @@ export default function Projects({ theme }: Props) {
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = t.bord; el.style.color = t.fg2 }}>
               Join the Team
             </button>
-          </div>
-        </Reveal>
-
-        <Reveal delay={240}>
-          <div style={{ marginTop: 80, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
-            {['Nonprofit CRM', 'Community Portal', 'Event Platform', 'Resource Directory', 'Volunteer Manager', 'Impact Dashboard'].map((name, i) => (
-              <motion.div key={name} whileHover={{ y: -2 }}
-                style={{ padding: '20px 20px', borderRadius: 10, border: `1.5px dashed ${t.bord}`, opacity: 0.5, background: t.surf }}>
-                <div style={{ fontFamily: F.mono, fontSize: '0.56rem', color: t.fg3, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>Coming Fall 2026</div>
-                <div style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '0.9rem', color: t.fg }}>{name}</div>
-              </motion.div>
-            ))}
           </div>
         </Reveal>
       </div>

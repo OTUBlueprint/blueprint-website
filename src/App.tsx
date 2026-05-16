@@ -120,7 +120,42 @@ function AppInner() {
         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E")`,
         opacity: 0.6,
       }} />
+<style>{`
+  @media (max-width: 768px) {
+    /* Padding */
+    section { padding-left: 24px !important; padding-right: 24px !important; }
 
+    /* Multi-column grids → single column */
+    [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+
+    /* Footer grid */
+    footer > div:first-child { grid-template-columns: 1fr !important; padding: 40px 24px !important; }
+
+    /* Footer wordmark */
+    footer [style*="clamp"] { font-size: clamp(2.4rem, 12vw, 5rem) !important; white-space: normal !important; }
+    footer [style*="padding: '0 40px'"] { padding: 0 24px !important; }
+    footer [style*="padding: '12px 52px"] { padding: 12px 24px 28px !important; }
+
+    /* Role rows inner padding */
+    [style*="padding: '18px 52px'"] { padding: 18px 20px !important; }
+    [style*="padding: '32px 52px'"] { padding: 24px 20px !important; }
+    [style*="padding: '24px 52px'"] { padding: 24px 20px !important; }
+    [style*="padding: '16px 52px'"] { padding: 16px 20px !important; }
+
+    /* Apply back button */
+    [style*="left: 52px"] { left: 16px !important; }
+
+    /* Hero nowrap */
+    [style*="white-space: nowrap"] { white-space: normal !important; }
+
+    /* Filters wrap */
+    [style*="display: flex"][style*="gap: 12"] { flex-wrap: wrap !important; }
+  }
+
+  @media (max-width: 480px) {
+    section { padding-left: 16px !important; padding-right: 16px !important; }
+  }
+`}</style>
       <Cursor />
       <Loader onDone={() => setLoaded(true)} />
 

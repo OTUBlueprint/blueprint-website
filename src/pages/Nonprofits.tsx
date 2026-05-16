@@ -79,12 +79,12 @@ export default function Nonprofits({ theme }: Props) {
         <Reveal delay={60}>
           <WordStagger text="The right nonprofit partner." style={{ fontFamily: F.syne, fontWeight: 800, fontSize: 'clamp(2rem,4vw,3.4rem)', lineHeight: 1.0, letterSpacing: '-0.03em', color: t.fg, marginBottom: 52 }} />
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 0.9fr', gap: 2 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 0.9fr', gap: 2, alignItems: 'stretch' }}>
           {CRITERIA.map(({ title, desc }, i) => (
             <Reveal key={title} delay={i * 50}>
-              <motion.div whileHover={{ y: -4, borderColor: C.blue }} style={{ background: t.surf, border: `1px solid ${t.bord}`, borderRadius: 10, padding: '24px 20px', transition: 'border-color 0.25s' }}>
-                <div style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '0.92rem', color: t.fg, marginBottom: 9 }}>{title}</div>
-                <p style={{ fontFamily: F.mono, fontSize: '0.76rem', color: t.fg2, lineHeight: 1.68, fontWeight: 400 }}>{desc}</p>
+              <motion.div whileHover={{ y: -4, borderColor: C.blue }} style={{ background: t.surf, border: `1px solid ${t.bord}`, borderRadius: 10, padding: '24px 20px', transition: 'border-color 0.25s', height: '100%' }}>
+                <div style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '1rem', color: t.fg, marginBottom: 10 }}>{title}</div>
+                <p style={{ fontFamily: F.mono, fontSize: '0.78rem', color: t.fg2, lineHeight: 1.72, fontWeight: 400 }}>{desc}</p>
               </motion.div>
             </Reveal>
           ))}
@@ -124,7 +124,7 @@ export default function Nonprofits({ theme }: Props) {
                 </div>
                 <div style={{ background: C.blueDim, border: `1px solid ${C.blueBorder}`, borderRadius: 10, padding: '18px 20px' }}>
                   <div style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '0.84rem', color: C.blue, marginBottom: 6 }}>Questions?</div>
-                  <div style={{ fontFamily: F.mono, fontSize: '0.74rem', color: t.fg2, fontWeight: 400 }}>Email us at blueprintotech@gmail.com or reach out on LinkedIn.</div>
+                  <div style={{ fontFamily: F.mono, fontSize: '0.74rem', color: t.fg2, fontWeight: 400 }}>Email us at <a href="mailto:otublueprint@hotmail.com" style={{ color: C.blue, textDecoration: 'none' }}>otublueprint@hotmail.com</a> or reach out on LinkedIn.</div>
                 </div>
               </div>
             </Reveal>

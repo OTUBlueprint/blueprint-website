@@ -89,19 +89,21 @@ function BgLogo({ style }: { style?: React.CSSProperties }) {
     >
       <div style={{ position: 'relative', width: '100%', height: '100%' }}>
         <img
-          src="/logo.webp"
-          alt=""
-          style={{
-            width: '100%', height: '100%',
-            objectFit: 'contain',
-            opacity: light.active ? 0.32 : 0.12,
-            filter: light.active
-              ? 'grayscale(1) brightness(2.6) contrast(1.2) saturate(0)'
-              : 'none',
-            transition: 'opacity 0.5s ease, filter 0.5s ease',
-            display: 'block',
-          }}
-        />
+  src="/logo.webp"
+  alt=""
+  style={{
+    width: '100%', height: '100%',
+    objectFit: 'contain',
+    opacity: light.active ? 0.32 : 0.12,
+    filter: light.active
+      ? 'grayscale(1) brightness(2.6) contrast(1.2) saturate(0)'
+      : 'none',
+    transition: 'opacity 0.5s ease, filter 0.5s ease',
+    display: 'block',
+    mixBlendMode: 'luminosity',
+    background: 'transparent',
+  }}
+/>
         <div style={{
           position: 'absolute', inset: 0,
           backgroundImage: light.active
