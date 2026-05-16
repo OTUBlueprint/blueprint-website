@@ -30,11 +30,12 @@ function playGlowSound() {
     const gain = ctx.createGain()
     osc.connect(gain); gain.connect(ctx.destination)
     osc.type = 'sine'
-    osc.frequency.setValueAtTime(40, ctx.currentTime)
-    gain.gain.setValueAtTime(0.03, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02)
+    osc.frequency.setValueAtTime(660, ctx.currentTime)
+    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1)
+    gain.gain.setValueAtTime(0.006, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12)
     osc.start(ctx.currentTime)
-    osc.stop(ctx.currentTime + 0.02)
+    osc.stop(ctx.currentTime + 0.12)
   } catch (_) {}
 }
 

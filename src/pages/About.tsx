@@ -30,11 +30,11 @@ function playTick() {
     const gain = ctx.createGain()
     osc.connect(gain); gain.connect(ctx.destination)
     osc.type = 'sine'
-    osc.frequency.setValueAtTime(40, ctx.currentTime)
-    gain.gain.setValueAtTime(0.03, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02)
+    osc.frequency.setValueAtTime(880, ctx.currentTime)
+    gain.gain.setValueAtTime(0.008, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.015)
     osc.start(ctx.currentTime)
-    osc.stop(ctx.currentTime + 0.02)
+    osc.stop(ctx.currentTime + 0.015)
   } catch (_) {}
 }
 
@@ -45,15 +45,14 @@ function playBounceSound() {
     const gain = ctx.createGain()
     osc.connect(gain); gain.connect(ctx.destination)
     osc.type = 'sine'
-    osc.frequency.setValueAtTime(200, ctx.currentTime)
-    osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.15)
-    gain.gain.setValueAtTime(0.12, ctx.currentTime)
+    osc.frequency.setValueAtTime(520, ctx.currentTime)
+    osc.frequency.exponentialRampToValueAtTime(280, ctx.currentTime + 0.12)
+    gain.gain.setValueAtTime(0.03, ctx.currentTime)
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2)
     osc.start(ctx.currentTime)
     osc.stop(ctx.currentTime + 0.2)
   } catch (_) {}
 }
-
 function BgLogo({ style }: { style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null)
   const [light, setLight] = useState({ x: 50, y: 50, active: false })
