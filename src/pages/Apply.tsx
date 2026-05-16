@@ -11,7 +11,7 @@ import { subscribeNewsletter } from '../newsletter'
 
 interface Props { theme: 'dark'|'light' }
 
-const DEST       = 'Chinonye.ekeigwe@ontariotechu.net'
+const DEST       = 'otublueprint@hotmail.com'
 const CLOSE_DATE = new Date('2026-07-01T00:00:00')
 const IS_OPEN    = new Date() < CLOSE_DATE
 const STATUS_LABEL = IS_OPEN ? 'Open Now' : 'Closed'
