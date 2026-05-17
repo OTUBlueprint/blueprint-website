@@ -18,6 +18,7 @@ import Apply      from './pages/Apply'
 import Sponsors   from './pages/Sponsors'
 import Nonprofits from './pages/Nonprofits'
 import Social     from './pages/Social'
+import Unsubscribe from './pages/Unsubscribe'
 
 const NAV_LINKS = [
   { path: '/',           label: 'Home'       },
