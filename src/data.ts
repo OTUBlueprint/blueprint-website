@@ -12,7 +12,7 @@ export const EVENTS: BpEvent[] = [
 export const TEAM: Member[] = [
   { id:1, name:'Jun Bin Cheng',   role:'Founder',           program:'Ontario Tech University', year:'', initials:'J', isExec:true },
   { id:2, name:'Valerie Ekeigwe', role:'President',         program:'Ontario Tech University', year:'', initials:'V', isExec:true },
-  { id:3, name:'Kumayl Zafar',          role:'Vice President',    program:'Ontario Tech University', year:'', initials:'K', isExec:true },
+  { id:3, name:'Kumayl Zafar',    role:'Vice President',    program:'Ontario Tech University', year:'', initials:'K', isExec:true },
 ]
 
 export const TEAMS = [
