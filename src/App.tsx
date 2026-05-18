@@ -18,6 +18,7 @@ import Sponsors    from './pages/Sponsors'
 import Nonprofits  from './pages/Nonprofits'
 import Social      from './pages/Social'
 import Unsubscribe from './pages/Unsubscribe'
+import Welcome from './pages/Welcome'
 
 const NAV_LINKS = [
   { path: '/',           label: 'Home'       },
@@ -175,6 +176,7 @@ function AppInner() {
                 <Route path="/social"      element={<Social      theme={theme} />} />
                 <Route path="/unsubscribe" element={<Unsubscribe theme={theme} />} />
                 <Route path="*"            element={<Home        theme={theme} />} />
+                <Route path="/welcome" element={<Welcome theme={theme} />} />
               </Routes>
             </PageWipe>
           </main>

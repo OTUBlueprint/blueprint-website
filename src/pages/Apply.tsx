@@ -7,7 +7,7 @@ import WordStagger from '../components/WordStagger'
 import Reveal from '../components/Reveal'
 import LineReveal from '../components/LineReveal'
 import Eyebrow from '../components/Eyebrow'
-import { subscribeNewsletter } from '../newsletter'
+import { subscribeNewsletter, sendApplication } from '../newsletter'
 
 interface Props { theme: 'dark'|'light' }
 
@@ -109,30 +109,33 @@ export default function Apply({ theme }: Props) {
     setNews(false); setCareers(false)
   }
 
-  function submitApp(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const data = new FormData(e.currentTarget)
-    const entries: Record<string, string> = {}
-    data.forEach((v, k) => { entries[k] = v as string })
-    entries['Team']            = activeTeamObj?.name || ''
-    entries['Role']            = activeRole
-    entries['Secondary Team']  = secondaryTeam
-    entries['Secondary Role']  = secondaryRole
-    entries['Commitment']      = commitment
-    entries['Availability']    = availability.join(', ')
-    entries['Hours per week']  = hours
-    entries['Newsletter']      = newsletter ? 'Yes' : 'No'
-    entries['Careers updates'] = careersNews ? 'Yes' : 'No'
-    const subject = encodeURIComponent(`Blueprint OTU Application — ${activeRole}`)
-    const body    = encodeURIComponent(Object.entries(entries).map(([k, v]) => `${k}: ${v}`).join('\n'))
-    const a = document.createElement('a')
-    a.href = `mailto:${DEST}?subject=${subject}&body=${body}`
-    a.click()
-    if (newsletter)  subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'newsletter' })
-    if (careersNews) subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'careers' })
-    setView('submitted')
-    resetForm()
-  }
+  async function submitApp(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault()
+  const data = new FormData(e.currentTarget)
+  const entries: Record<string, string> = {}
+  data.forEach((v, k) => { entries[k] = v as string })
+
+  await sendApplication({
+    to_name:        entries['Full Name']          || '',
+    to_email:       entries['Ontario Tech Email'] || '',
+    role:           activeRole,
+    team:           activeTeamObj?.name           || '',
+    program:        entries['Program and Year']   || '',
+    why_blueprint:  entries['Why Blueprint']      || '',
+    why_role:       entries['Why this role']      || '',
+    experience:     entries['Experience']         || '',
+    availability:   availability.join(', '),
+    hours,
+    secondary_team: secondaryTeam,
+    secondary_role: secondaryRole,
+  })
+
+  if (newsletter)  subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'newsletter' })
+  if (careersNews) subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'careers' })
+
+  setView('submitted')
+  resetForm()
+}
 
   async function submitMail() {
     if (!mailEmail) return

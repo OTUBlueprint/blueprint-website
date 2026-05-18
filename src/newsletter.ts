@@ -31,3 +31,53 @@ export async function subscribeNewsletter(payload: NewsletterPayload): Promise<b
     return false
   }
 }
+
+export interface ApplicationPayload {
+  to_name:        string
+  to_email:       string
+  role:           string
+  team:           string
+  program:        string
+  why_blueprint:  string
+  why_role:       string
+  experience:     string
+  availability:   string
+  hours:          string
+  secondary_team: string
+  secondary_role: string
+}
+
+export async function sendApplication(payload: ApplicationPayload): Promise<boolean> {
+  try {
+    await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': import.meta.env.VITE_BREVO_API_KEY,
+      },
+      body: JSON.stringify({
+        to: [{ email: payload.to_email, name: payload.to_name }],
+        templateId: Number(import.meta.env.VITE_BREVO_APPLICATION_RECEIVED),
+        params: payload,
+      }),
+    })
+
+    await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': import.meta.env.VITE_BREVO_API_KEY,
+      },
+      body: JSON.stringify({
+        to: [{ email: 'hello@otublueprint.com', name: 'Blueprint OTU' }],
+        templateId: Number(import.meta.env.VITE_BREVO_APPLICATION_INTERNAL),
+        params: payload,
+      }),
+    })
+
+    return true
+  } catch (e) {
+    console.error('Brevo error:', e)
+    return false
+  }
+}
