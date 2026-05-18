@@ -8,8 +8,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const payload = req.body
 
   try {
-    // Send to applicant
-    await fetch('https://api.brevo.com/v3/smtp/email', {
+    const r1 = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -21,9 +20,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         params: payload,
       }),
     })
+    const d1 = await r1.json()
+    console.log('Applicant email response:', JSON.stringify(d1))
 
-    // Send internal notification
-    await fetch('https://api.brevo.com/v3/smtp/email', {
+    const r2 = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,6 +35,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         params: payload,
       }),
     })
+    const d2 = await r2.json()
+    console.log('Internal email response:', JSON.stringify(d2))
 
     return res.status(200).json({ success: true })
   } catch (e) {
