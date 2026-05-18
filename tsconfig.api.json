@@ -4,9 +4,9 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "strict": false,
     "skipLibCheck": true,
-    "outDir": "../dist-api"
+    "strict": false,
+    "outDir": "api-dist"
   },
-  "include": ["."]
+  "include": ["api"]
 }

@@ -1,6 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+const handler = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
@@ -18,12 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const internalTemplateId = process.env.BREVO_APPLICATION_INTERNAL
 
   if (!apiKey || !applicantTemplateId || !internalTemplateId) {
-    console.error('Missing environment variables:', {
-      hasApiKey: !!apiKey,
-      hasApplicantTemplate: !!applicantTemplateId,
-      hasInternalTemplate: !!internalTemplateId,
-    })
-    return res.status(500).json({ error: 'Server misconfiguration: missing environment variables' })
+    return res.status(500).json({ error: 'Server misconfiguration' })
   }
 
   const payload = req.body
@@ -40,19 +33,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'api-key': apiKey,
       },
       body: JSON.stringify({
-        to: [{ email: payload.to_email, name: payload.to_name ?? '' }],
+        to: [{ email: payload.to_email, name: payload.to_name || '' }],
         templateId: Number(applicantTemplateId),
         params: payload,
       }),
     })
-
     const d1 = await r1.json()
     console.log('Applicant email response:', JSON.stringify(d1))
-
-    if (!r1.ok) {
-      console.error('Brevo applicant email failed:', d1)
-      return res.status(500).json({ error: 'Failed to send applicant email', detail: d1 })
-    }
 
     const r2 = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
@@ -66,14 +53,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         params: payload,
       }),
     })
-
     const d2 = await r2.json()
     console.log('Internal email response:', JSON.stringify(d2))
-
-    if (!r2.ok) {
-      console.error('Brevo internal email failed:', d2)
-      return res.status(500).json({ error: 'Failed to send internal email', detail: d2 })
-    }
 
     return res.status(200).json({ success: true })
   } catch (e) {
@@ -81,3 +62,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'Unexpected server error', detail: String(e) })
   }
 }
+
+module.exports = handler
