@@ -1,46 +1,83 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end()
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
+  const apiKey = process.env.BREVO_API_KEY
+  const applicantTemplateId = process.env.BREVO_APPLICATION_RECEIVED
+  const internalTemplateId = process.env.BREVO_APPLICATION_INTERNAL
+
+  if (!apiKey || !applicantTemplateId || !internalTemplateId) {
+    console.error('Missing environment variables:', {
+      hasApiKey: !!apiKey,
+      hasApplicantTemplate: !!applicantTemplateId,
+      hasInternalTemplate: !!internalTemplateId,
+    })
+    return res.status(500).json({ error: 'Server misconfiguration: missing environment variables' })
+  }
+
   const payload = req.body
+
+  if (!payload || !payload.to_email) {
+    return res.status(400).json({ error: 'Missing required field: to_email' })
+  }
 
   try {
     const r1 = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': process.env.BREVO_API_KEY!,
+        'api-key': apiKey,
       },
       body: JSON.stringify({
-        to: [{ email: payload.to_email, name: payload.to_name }],
-        templateId: Number(process.env.BREVO_APPLICATION_RECEIVED),
+        to: [{ email: payload.to_email, name: payload.to_name ?? '' }],
+        templateId: Number(applicantTemplateId),
         params: payload,
       }),
     })
+
     const d1 = await r1.json()
     console.log('Applicant email response:', JSON.stringify(d1))
+
+    if (!r1.ok) {
+      console.error('Brevo applicant email failed:', d1)
+      return res.status(500).json({ error: 'Failed to send applicant email', detail: d1 })
+    }
 
     const r2 = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': process.env.BREVO_API_KEY!,
+        'api-key': apiKey,
       },
       body: JSON.stringify({
         to: [{ email: 'hello@otublueprint.com', name: 'Blueprint OTU' }],
-        templateId: Number(process.env.BREVO_APPLICATION_INTERNAL),
+        templateId: Number(internalTemplateId),
         params: payload,
       }),
     })
+
     const d2 = await r2.json()
     console.log('Internal email response:', JSON.stringify(d2))
 
+    if (!r2.ok) {
+      console.error('Brevo internal email failed:', d2)
+      return res.status(500).json({ error: 'Failed to send internal email', detail: d2 })
+    }
+
     return res.status(200).json({ success: true })
   } catch (e) {
-    console.error('Brevo error:', e)
-    return res.status(500).json({ error: 'Failed to send email' })
+    console.error('Unexpected error:', e)
+    return res.status(500).json({ error: 'Unexpected server error', detail: String(e) })
   }
 }
