@@ -834,6 +834,9 @@ export default function Apply({ theme }: Props) {
                   <p style={{ fontFamily: F.mono, fontSize: '0.8rem', color: t.fg2, lineHeight: 1.7, fontWeight: 400 }}>
                     We will reach out when {mailType === 'careers' ? 'new roles drop' : 'Blueprint OTU updates go live'}.
                   </p>
+                  <p style={{ fontFamily: F.mono, fontSize: '0.72rem', color: t.fg3, lineHeight: 1.6, fontWeight: 400, marginTop: 8 }}>
+  We've sent a confirmation to your inbox. If you don't see it, check your spam folder and mark it as not spam.
+</p>
                   <button onClick={() => { setShowMail(false); setMailSent(false) }}
                     style={{ marginTop: 20, fontFamily: F.mono, fontSize: '0.65rem', color: t.fg3, background: 'none', border: `1px solid ${t.bord}`, borderRadius: 8, padding: '8px 18px' }}>
                     Close
