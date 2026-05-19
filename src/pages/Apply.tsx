@@ -11,9 +11,8 @@ import { subscribeNewsletter, sendApplication } from '../newsletter'
 
 interface Props { theme: 'dark'|'light' }
 
-const DEST       = 'otublueprint@hotmail.com'
-const CLOSE_DATE = new Date('2026-07-01T00:00:00')
-const IS_OPEN    = new Date() < CLOSE_DATE
+const CLOSE_DATE   = new Date('2026-07-01T00:00:00')
+const IS_OPEN      = new Date() < CLOSE_DATE
 const STATUS_LABEL = IS_OPEN ? 'Open Now' : 'Closed'
 const STATUS_COLOR = IS_OPEN ? '#4ade80' : '#f87171'
 const CLOSE_LABEL  = 'Closes July 1, 2026'
@@ -51,6 +50,7 @@ export default function Apply({ theme }: Props) {
   const [mailName,  setMailName]  = useState('')
   const [mailType,  setMailType]  = useState<'newsletter'|'careers'>('newsletter')
   const [mailSent,  setMailSent]  = useState(false)
+  const [mailError, setMailError] = useState<string | null>(null)
 
   const [openFaq, setFaq] = useState<number | null>(null)
 
@@ -110,43 +110,48 @@ export default function Apply({ theme }: Props) {
   }
 
   async function submitApp(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault()
-  const data = new FormData(e.currentTarget)
-  const entries: Record<string, string> = {}
-  data.forEach((v, k) => { entries[k] = v as string })
+    e.preventDefault()
+    const data = new FormData(e.currentTarget)
+    const entries: Record<string, string> = {}
+    data.forEach((v, k) => { entries[k] = v as string })
 
-  await sendApplication({
-  to_name:        entries['Full Name']          || '',
-  to_email:       entries['Ontario Tech Email'] || '',
-  role:           activeRole,
-  team:           activeTeamObj?.name           || '',
-  program:        entries['Program and Year']   || '',
-  linkedin:       entries['LinkedIn']           || '',
-  github:         entries['GitHub']             || '',
-  portfolio:      entries['Portfolio']          || '',
-  resume:         entries['Resume']             || '',
-  why_blueprint:  entries['Why Blueprint']      || '',
-  why_role:       entries['Why this role']      || '',
-  experience:     entries['Experience']         || '',
-  tech_for_good:  entries['Tech for Good']      || '',
-  commitment,
-  availability:   availability.join(', '),
-  hours,
-  secondary_team: secondaryTeam,
-  secondary_role: secondaryRole,
-})
+    await sendApplication({
+      to_name:        entries['Full Name']          || '',
+      to_email:       entries['Ontario Tech Email'] || '',
+      role:           activeRole,
+      team:           activeTeamObj?.name           || '',
+      program:        entries['Program and Year']   || '',
+      linkedin:       entries['LinkedIn']           || '',
+      github:         entries['GitHub']             || '',
+      portfolio:      entries['Portfolio']          || '',
+      resume:         entries['Resume']             || '',
+      why_blueprint:  entries['Why Blueprint']      || '',
+      why_role:       entries['Why this role']      || '',
+      experience:     entries['Experience']         || '',
+      tech_for_good:  entries['Tech for Good']      || '',
+      commitment,
+      availability:   availability.join(', '),
+      hours,
+      secondary_team: secondaryTeam,
+      secondary_role: secondaryRole,
+    })
 
-  if (newsletter)  subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'newsletter' })
-  if (careersNews) subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'careers' })
+    if (newsletter)  subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'newsletter' })
+    if (careersNews) subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'careers' })
 
-  setView('submitted')
-  resetForm()
-}
+    setView('submitted')
+    resetForm()
+  }
 
   async function submitMail() {
     if (!mailEmail) return
-    await subscribeNewsletter({ email: mailEmail, name: mailName, type: mailType })
-    setMailSent(true)
+    setMailError(null)
+    try {
+      await subscribeNewsletter({ email: mailEmail, name: mailName, type: mailType })
+      setMailSent(true)
+    } catch {
+      setMailError('Something went wrong. You may already be subscribed.')
+    }
   }
 
   const currentTeam = activeTeamObj || TEAMS.find(t => t.id === activeTeam)
@@ -351,8 +356,6 @@ export default function Apply({ theme }: Props) {
                   return (
                     <Reveal key={team.id} delay={i * 60}>
                       <div style={{ borderBottom: `1px solid ${t.bord}` }}>
-
-                        {/* Team header row */}
                         <motion.div
                           onClick={() => setExpanded(isOpen ? null : team.id)}
                           whileHover={{ x: 6 }}
@@ -374,13 +377,11 @@ export default function Apply({ theme }: Props) {
                             style={{ fontSize: '1.4rem', color: isOpen ? C.blue : t.fg3, lineHeight: 1, userSelect: 'none', transition: 'color 0.25s' }}>+</motion.div>
                         </motion.div>
 
-                        {/* Expanded */}
                         <AnimatePresence>
                           {isOpen && (
                             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.45, ease: [0.16,1,0.3,1] }} style={{ overflow: 'hidden' }}>
 
-                              {/* Info strip */}
                               <div style={{ padding: '0 52px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 2, borderBottom: `1px solid ${t.bord}` }}>
                                 {[['Experience', team.experience], ['Status', STATUS_LABEL], ['Commitment', team.commitment]].map(([k, v]) => (
                                   <div key={k} style={{ background: t.surf, border: `1px solid ${t.bord}`, borderRadius: 8, padding: '10px 14px' }}>
@@ -390,7 +391,6 @@ export default function Apply({ theme }: Props) {
                                 ))}
                               </div>
 
-                              {/* Skills */}
                               <div style={{ padding: '16px 52px 20px', borderBottom: `1px solid ${t.bord}` }}>
                                 <div style={{ fontFamily: F.mono, fontSize: '0.56rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: t.fg3, marginBottom: 10 }}>Skills we look for</div>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
@@ -400,7 +400,6 @@ export default function Apply({ theme }: Props) {
                                 </div>
                               </div>
 
-                              {/* Role rows */}
                               <div>
                                 {team.roles.map((role, ri) => {
                                   const roleKey    = `${team.id}-${role.title}`
@@ -435,7 +434,6 @@ export default function Apply({ theme }: Props) {
                                         </div>
                                       </motion.div>
 
-                                      {/* Qualifications drawer */}
                                       <AnimatePresence>
                                         {isRoleOpen && (
                                           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
@@ -667,22 +665,32 @@ export default function Apply({ theme }: Props) {
               {/* Left column */}
               <div>
                 <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: t.fg3, marginBottom: 24 }}>Personal Information</div>
-                <input name="Full Name"          placeholder="Full name"               required style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
-                <input name="Ontario Tech Email" type="email" placeholder="your@ontariotechu.net" required style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
-                <input name="Program and Year"   placeholder="Program and year"        required style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
-                <input name="LinkedIn"           placeholder="LinkedIn (optional)"              style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
-                <input name="GitHub"             placeholder="GitHub (optional)"                style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
-                <input name="Portfolio"          placeholder="Portfolio or work link (optional)" style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
+                <input name="Full Name" placeholder="Full name" required style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
+                <input
+                  name="Ontario Tech Email"
+                  type="email"
+                  placeholder="your@ontariotechu.net"
+                  required
+                  pattern=".*@ontariotechu\.net$"
+                  title="Please use your Ontario Tech email address ending in @ontariotechu.net"
+                  style={IS}
+                  onFocus={e => (e.currentTarget.style.borderBottomColor = C.blue)}
+                  onBlur={e => (e.currentTarget.style.borderBottomColor = fb)}
+                />
+                <input name="Program and Year" placeholder="Program and year" required style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
+                <input name="LinkedIn"  placeholder="LinkedIn (optional)"              style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
+                <input name="GitHub"    placeholder="GitHub (optional)"                style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
+                <input name="Portfolio" placeholder="Portfolio or work link (optional)" style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
 
                 <div style={{ marginBottom: 28 }}>
                   <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: t.fg3, marginBottom: 8 }}>Resume (optional)</div>
-<input
-  name="Resume"
-  placeholder="Google Drive or Dropbox link to your resume"
-  style={IS}
-  onFocus={e => (e.currentTarget.style.borderBottomColor = C.blue)}
-  onBlur={e => (e.currentTarget.style.borderBottomColor = fb)}
-/>
+                  <input
+                    name="Resume"
+                    placeholder="Google Drive or Dropbox link to your resume"
+                    style={IS}
+                    onFocus={e => (e.currentTarget.style.borderBottomColor = C.blue)}
+                    onBlur={e => (e.currentTarget.style.borderBottomColor = fb)}
+                  />
                 </div>
 
                 <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: t.fg3, marginBottom: 8 }}>Secondary preference (optional)</div>
@@ -710,7 +718,7 @@ export default function Apply({ theme }: Props) {
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ fontFamily: F.mono, fontSize: '0.64rem', color: t.fg3, marginBottom: 10 }}>Can you commit to approximately 8 hours per week?</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                    {['Yes', 'Mostly — I will communicate during busy periods', "I am unsure"].map(opt => (
+                    {['Yes', 'Mostly — I will communicate during busy periods', 'I am unsure'].map(opt => (
                       <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'default' }}>
                         <input type="radio" name="commitment-radio" value={opt} checked={commitment === opt} onChange={() => setCommit(opt)} style={{ accentColor: C.blue }} />
                         <span style={{ fontFamily: F.mono, fontSize: '0.74rem', color: t.fg, fontWeight: 400 }}>{opt}</span>
@@ -801,12 +809,12 @@ export default function Apply({ theme }: Props) {
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.5 }}>
               <div style={{ fontFamily: F.clash, fontWeight: 700, fontSize: 'clamp(2.2rem,5vw,4.5rem)', color: t.fg, marginBottom: 12, letterSpacing: '-0.04em', lineHeight: 1 }}>Application received.</div>
               <div style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '1rem', color: C.blue, marginBottom: 24 }}>{activeRole} · {currentTeam?.name}</div>
-              <p style={{ fontFamily: F.mono, fontSize: '0.86rem', color: t.fg2, maxWidth: 400, margin: '0 auto 36px', lineHeight: 1.84, fontWeight: 400 }}>
+              <p style={{ fontFamily: F.mono, fontSize: '0.86rem', color: t.fg2, maxWidth: 400, margin: '0 auto 12px', lineHeight: 1.84, fontWeight: 400 }}>
                 We review every application within 7 days. Shortlisted applicants will be invited for a short conversation. You will hear from us via your OTU email.
               </p>
               <p style={{ fontFamily: F.mono, fontSize: '0.76rem', color: t.fg3, maxWidth: 400, margin: '0 auto 36px', lineHeight: 1.7, fontWeight: 400 }}>
-  Check your spam folder if you don't see a confirmation email and mark it as not spam.
-</p>
+                Check your spam folder if you don't see a confirmation email and mark it as not spam.
+              </p>
               <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
                 <button onClick={() => { setView('teams'); setActiveTeam(null); setActiveRole(''); setActiveTeamObj(null) }}
                   style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', background: C.blue, color: '#fff', padding: '11px 26px', borderRadius: 10, border: 'none', transition: 'background 0.2s' }}
@@ -832,7 +840,7 @@ export default function Apply({ theme }: Props) {
         {showMail && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             style={{ position: 'fixed', inset: 0, zIndex: 900, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
-            onClick={() => { setShowMail(false); setMailSent(false) }}>
+            onClick={() => { setShowMail(false); setMailSent(false); setMailError(null) }}>
             <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ duration: 0.3, ease: [0.16,1,0.3,1] }}
               onClick={e => e.stopPropagation()}
@@ -844,9 +852,9 @@ export default function Apply({ theme }: Props) {
                     We will reach out when {mailType === 'careers' ? 'new roles drop' : 'Blueprint OTU updates go live'}.
                   </p>
                   <p style={{ fontFamily: F.mono, fontSize: '0.72rem', color: t.fg3, lineHeight: 1.6, fontWeight: 400, marginTop: 8 }}>
-  We've sent a confirmation to your inbox. If you don't see it, check your spam folder and mark it as not spam.
-</p>
-                  <button onClick={() => { setShowMail(false); setMailSent(false) }}
+                    We've sent a confirmation to your inbox. If you don't see it, check your spam folder and mark it as not spam.
+                  </p>
+                  <button onClick={() => { setShowMail(false); setMailSent(false); setMailError(null) }}
                     style={{ marginTop: 20, fontFamily: F.mono, fontSize: '0.65rem', color: t.fg3, background: 'none', border: `1px solid ${t.bord}`, borderRadius: 8, padding: '8px 18px' }}>
                     Close
                   </button>
@@ -873,13 +881,18 @@ export default function Apply({ theme }: Props) {
                   <input type="email" placeholder="your@email.com" value={mailEmail} onChange={e => setMailEmail(e.target.value)} required
                     style={{ display: 'block', width: '100%', background: 'transparent', border: 'none', borderBottom: `1px solid ${fb}`, color: t.fg, fontFamily: F.mono, fontSize: '0.8rem', fontWeight: 400, padding: '10px 0', outline: 'none', marginBottom: 24, boxSizing: 'border-box' }}
                     onFocus={e => (e.currentTarget.style.borderBottomColor = C.blue)} onBlur={e => (e.currentTarget.style.borderBottomColor = fb)} />
+                  {mailError && (
+                    <p style={{ fontFamily: F.mono, fontSize: '0.7rem', color: '#f87171', marginBottom: 12, lineHeight: 1.5 }}>
+                      {mailError}
+                    </p>
+                  )}
                   <button onClick={submitMail}
                     style={{ width: '100%', fontFamily: F.syne, fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', background: C.blue, color: '#fff', padding: '13px', borderRadius: 10, border: 'none', transition: 'background 0.2s' }}
                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = C.blueMid}
                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = C.blue}>
                     Subscribe
                   </button>
-                  <button onClick={() => setShowMail(false)}
+                  <button onClick={() => { setShowMail(false); setMailError(null) }}
                     style={{ width: '100%', marginTop: 10, fontFamily: F.mono, fontSize: '0.65rem', color: t.fg3, background: 'none', border: 'none' }}>
                     No thanks
                   </button>
