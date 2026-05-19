@@ -16,20 +16,9 @@ export interface NewsletterPayload {
 
 export async function subscribeNewsletter(payload: NewsletterPayload): Promise<boolean> {
   try {
-    await emailjs.send(
-      SERVICE_ID,
-      TEMPLATE_IDS[payload.type],
-      {
-        to_email: payload.email,
-        to_name:  payload.name || 'there',
-      },
-      PUBLIC_KEY
-    )
+    await emailjs.send(SERVICE_ID, TEMPLATE_IDS[payload.type], { to_email: payload.email, to_name: payload.name || 'there' }, PUBLIC_KEY)
     return true
-  } catch (e) {
-    console.error('EmailJS error:', e)
-    return false
-  }
+  } catch (e) { console.error('EmailJS error:', e); return false }
 }
 
 export interface ApplicationPayload {
@@ -38,46 +27,28 @@ export interface ApplicationPayload {
   role:           string
   team:           string
   program:        string
+  linkedin:       string
+  github:         string
+  portfolio:      string
   why_blueprint:  string
   why_role:       string
   experience:     string
+  tech_for_good:  string
+  commitment:     string
   availability:   string
   hours:          string
   secondary_team: string
   secondary_role: string
+  resume:         string
 }
 
 export async function sendApplication(payload: ApplicationPayload): Promise<boolean> {
   try {
-    await fetch('https://api.brevo.com/v3/smtp/email', {
+    await fetch('/api/send-application', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'api-key': import.meta.env.VITE_BREVO_API_KEY,
-      },
-      body: JSON.stringify({
-        to: [{ email: payload.to_email, name: payload.to_name }],
-        templateId: Number(import.meta.env.VITE_BREVO_APPLICATION_RECEIVED),
-        params: payload,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     })
-
-    await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'api-key': import.meta.env.VITE_BREVO_API_KEY,
-      },
-      body: JSON.stringify({
-        to: [{ email: 'hello@otublueprint.com', name: 'Blueprint OTU' }],
-        templateId: Number(import.meta.env.VITE_BREVO_APPLICATION_INTERNAL),
-        params: payload,
-      }),
-    })
-
     return true
-  } catch (e) {
-    console.error('Brevo error:', e)
-    return false
-  }
+  } catch (e) { console.error('Error:', e); return false }
 }

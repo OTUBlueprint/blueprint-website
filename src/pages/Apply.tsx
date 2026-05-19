@@ -116,19 +116,25 @@ export default function Apply({ theme }: Props) {
   data.forEach((v, k) => { entries[k] = v as string })
 
   await sendApplication({
-    to_name:        entries['Full Name']          || '',
-    to_email:       entries['Ontario Tech Email'] || '',
-    role:           activeRole,
-    team:           activeTeamObj?.name           || '',
-    program:        entries['Program and Year']   || '',
-    why_blueprint:  entries['Why Blueprint']      || '',
-    why_role:       entries['Why this role']      || '',
-    experience:     entries['Experience']         || '',
-    availability:   availability.join(', '),
-    hours,
-    secondary_team: secondaryTeam,
-    secondary_role: secondaryRole,
-  })
+  to_name:        entries['Full Name']          || '',
+  to_email:       entries['Ontario Tech Email'] || '',
+  role:           activeRole,
+  team:           activeTeamObj?.name           || '',
+  program:        entries['Program and Year']   || '',
+  linkedin:       entries['LinkedIn']           || '',
+  github:         entries['GitHub']             || '',
+  portfolio:      entries['Portfolio']          || '',
+  why_blueprint:  entries['Why Blueprint']      || '',
+  why_role:       entries['Why this role']      || '',
+  experience:     entries['Experience']         || '',
+  tech_for_good:  entries['Tech for Good']      || '',
+  commitment,
+  availability:   availability.join(', '),
+  hours,
+  secondary_team: secondaryTeam,
+  secondary_role: secondaryRole,
+  resume:         entries['Resume']             || '',
+})
 
   if (newsletter)  subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'newsletter' })
   if (careersNews) subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'careers' })
