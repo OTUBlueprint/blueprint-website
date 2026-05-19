@@ -67,7 +67,7 @@ export default function Social({ theme }: Props) {
       .then(r => r.json())
       .then(data => {
         const items = Array.isArray(data) ? data : data.posts || []
-        setPosts(items.slice(0, 9))
+        setPosts(items.slice(0, 3))
         setLoading(false)
       })
       .catch(() => { setError(true); setLoading(false) })
@@ -154,8 +154,8 @@ export default function Social({ theme }: Props) {
           )}
 
           {!loading && !error && posts.length > 0 && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 3, borderRadius: 12, overflow: 'hidden', border: `1px solid ${t.bord}` }}>
-              {posts.slice(0, 9).map((post, i) => (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, borderRadius: 12, overflow: 'hidden' }}>
+  {posts.slice(0, 3).map((post, i) => (
                 <motion.a
                   key={post.id}
                   href={post.permalink}

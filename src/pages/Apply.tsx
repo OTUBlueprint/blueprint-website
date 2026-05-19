@@ -804,6 +804,9 @@ export default function Apply({ theme }: Props) {
               <p style={{ fontFamily: F.mono, fontSize: '0.86rem', color: t.fg2, maxWidth: 400, margin: '0 auto 36px', lineHeight: 1.84, fontWeight: 400 }}>
                 We review every application within 7 days. Shortlisted applicants will be invited for a short conversation. You will hear from us via your OTU email.
               </p>
+              <p style={{ fontFamily: F.mono, fontSize: '0.76rem', color: t.fg3, maxWidth: 400, margin: '0 auto 36px', lineHeight: 1.7, fontWeight: 400 }}>
+  Check your spam folder if you don't see a confirmation email and mark it as not spam.
+</p>
               <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
                 <button onClick={() => { setView('teams'); setActiveTeam(null); setActiveRole(''); setActiveTeamObj(null) }}
                   style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', background: C.blue, color: '#fff', padding: '11px 26px', borderRadius: 10, border: 'none', transition: 'background 0.2s' }}
