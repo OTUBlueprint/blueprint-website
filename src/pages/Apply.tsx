@@ -52,7 +52,6 @@ export default function Apply({ theme }: Props) {
   const [mailType,  setMailType]  = useState<'newsletter'|'careers'>('newsletter')
   const [mailSent,  setMailSent]  = useState(false)
   const [mailError, setMailError] = useState<string | null>(null)
-  const [subscribedEmails, setSubscribedEmails] = useState<Set<string>>(new Set())
 
   const [openFaq, setFaq] = useState<number | null>(null)
 
@@ -145,21 +144,19 @@ export default function Apply({ theme }: Props) {
     resetForm()
   }
 
-  async function submitMail() {
+ async function submitMail() {
   if (!mailEmail) return
   setMailError(null)
 
-  if (subscribedEmails.has(mailEmail.toLowerCase())) {
-    setMailError('This email is already subscribed.')
-    return
-  }
-
   try {
     await subscribeNewsletter({ email: mailEmail, name: mailName, type: mailType })
-    setSubscribedEmails(prev => new Set(prev).add(mailEmail.toLowerCase()))
     setMailSent(true)
-  } catch {
-    setMailError('Something went wrong. Please try again.')
+  } catch (e: any) {
+    if (e.message === 'already_subscribed') {
+      setMailError('You are already subscribed.')
+    } else {
+      setMailError('Something went wrong. Please try again.')
+    }
   }
 }
 
