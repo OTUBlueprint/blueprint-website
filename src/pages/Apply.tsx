@@ -17,6 +17,7 @@ const STATUS_LABEL = IS_OPEN ? 'Open Now' : 'Closed'
 const STATUS_COLOR = IS_OPEN ? '#4ade80' : '#f87171'
 const CLOSE_LABEL  = 'Closes July 1, 2026'
 
+
 const TEAM_OPTIONS = [
   { value: 'creative',    label: 'Creative & Media Team'     },
   { value: 'community',   label: 'Community & Outreach Team' },
@@ -51,6 +52,7 @@ export default function Apply({ theme }: Props) {
   const [mailType,  setMailType]  = useState<'newsletter'|'careers'>('newsletter')
   const [mailSent,  setMailSent]  = useState(false)
   const [mailError, setMailError] = useState<string | null>(null)
+  const [subscribedEmails, setSubscribedEmails] = useState<Set<string>>(new Set())
 
   const [openFaq, setFaq] = useState<number | null>(null)
 
@@ -144,15 +146,22 @@ export default function Apply({ theme }: Props) {
   }
 
   async function submitMail() {
-    if (!mailEmail) return
-    setMailError(null)
-    try {
-      await subscribeNewsletter({ email: mailEmail, name: mailName, type: mailType })
-      setMailSent(true)
-    } catch {
-      setMailError('Something went wrong. You may already be subscribed.')
-    }
+  if (!mailEmail) return
+  setMailError(null)
+
+  if (subscribedEmails.has(mailEmail.toLowerCase())) {
+    setMailError('This email is already subscribed.')
+    return
   }
+
+  try {
+    await subscribeNewsletter({ email: mailEmail, name: mailName, type: mailType })
+    setSubscribedEmails(prev => new Set(prev).add(mailEmail.toLowerCase()))
+    setMailSent(true)
+  } catch {
+    setMailError('Something went wrong. Please try again.')
+  }
+}
 
   const currentTeam = activeTeamObj || TEAMS.find(t => t.id === activeTeam)
 

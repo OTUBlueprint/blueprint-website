@@ -14,14 +14,8 @@ export interface NewsletterPayload {
   type: 'newsletter' | 'careers'
 }
 
-export async function subscribeNewsletter(payload: NewsletterPayload): Promise<'success' | 'duplicate' | 'error'> {
-  try {
-    await emailjs.send(SERVICE_ID, TEMPLATE_IDS[payload.type], { to_email: payload.email, to_name: payload.name || 'there' }, PUBLIC_KEY)
-    return 'success'
-  } catch (e: any) {
-    console.error('EmailJS error:', e)
-    return 'error'
-  }
+export async function subscribeNewsletter(payload: NewsletterPayload): Promise<void> {
+  await emailjs.send(SERVICE_ID, TEMPLATE_IDS[payload.type], { to_email: payload.email, to_name: payload.name || 'there' }, PUBLIC_KEY)
 }
 
 export interface ApplicationPayload {
