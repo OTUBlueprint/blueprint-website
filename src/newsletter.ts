@@ -30,6 +30,7 @@ export interface ApplicationPayload {
   linkedin:       string
   github:         string
   portfolio:      string
+  resume:         string
   why_blueprint:  string
   why_role:       string
   experience:     string
@@ -39,7 +40,6 @@ export interface ApplicationPayload {
   hours:          string
   secondary_team: string
   secondary_role: string
-  resume:         string
 }
 
 export async function sendApplication(payload: ApplicationPayload): Promise<boolean> {

@@ -124,6 +124,7 @@ export default function Apply({ theme }: Props) {
   linkedin:       entries['LinkedIn']           || '',
   github:         entries['GitHub']             || '',
   portfolio:      entries['Portfolio']          || '',
+  resume:         entries['Resume']             || '',
   why_blueprint:  entries['Why Blueprint']      || '',
   why_role:       entries['Why this role']      || '',
   experience:     entries['Experience']         || '',
@@ -133,7 +134,6 @@ export default function Apply({ theme }: Props) {
   hours,
   secondary_team: secondaryTeam,
   secondary_role: secondaryRole,
-  resume:         entries['Resume']             || '',
 })
 
   if (newsletter)  subscribeNewsletter({ email: entries['Ontario Tech Email'] || '', name: entries['Full Name'] || '', type: 'newsletter' })
@@ -676,16 +676,13 @@ export default function Apply({ theme }: Props) {
 
                 <div style={{ marginBottom: 28 }}>
                   <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: t.fg3, marginBottom: 8 }}>Resume (optional)</div>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 10, border: `1.5px dashed ${t.bord}`, background: t.card, transition: 'border-color 0.2s' }}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = C.blue}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = t.bord}>
-                    <span style={{ fontSize: '0.9rem' }}>📎</span>
-                    <div>
-                      <div style={{ fontFamily: F.syne, fontWeight: 700, fontSize: '0.78rem', color: t.fg, marginBottom: 2 }}>Attach your resume</div>
-                      <div style={{ fontFamily: F.mono, fontSize: '0.62rem', color: t.fg3 }}>PDF or Word · max 5MB</div>
-                    </div>
-                    <input name="Resume" type="file" accept=".pdf,.doc,.docx" style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }} />
-                  </label>
+<input
+  name="Resume"
+  placeholder="Google Drive or Dropbox link to your resume"
+  style={IS}
+  onFocus={e => (e.currentTarget.style.borderBottomColor = C.blue)}
+  onBlur={e => (e.currentTarget.style.borderBottomColor = fb)}
+/>
                 </div>
 
                 <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: t.fg3, marginBottom: 8 }}>Secondary preference (optional)</div>
