@@ -219,7 +219,7 @@ function AppInner() {
                     <LiIcon size={15} color="currentColor" />
                     <span style={{ fontFamily: F.mono, fontSize: '0.72rem', fontWeight: 400 }}>Blueprint OTU</span>
                   </a>
-                  <a href="https://discord.gg/nxRccCVU" target="_blank" rel="noreferrer" style={linkStyle} onMouseEnter={linkHoverOn} onMouseLeave={linkHoverOff}>
+                  <a href="https://discord.gg/U2qeUHqR" target="_blank" rel="noreferrer" style={linkStyle} onMouseEnter={linkHoverOn} onMouseLeave={linkHoverOff}>
                     <DiscordIcon size={15} color="currentColor" />
                     <span style={{ fontFamily: F.mono, fontSize: '0.72rem', fontWeight: 400 }}>Join our Discord</span>
                   </a>

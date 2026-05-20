@@ -153,7 +153,7 @@ export default function Nav({ navLinks, currentPath, theme, toggle }: Props) {
               {[
                 { label: 'Instagram', url: 'https://www.instagram.com/otublueprint/' },
                 { label: 'LinkedIn',  url: 'https://www.linkedin.com/company/otu-blueprint/' },
-                { label: 'Discord',   url: 'https://discord.gg/nxRccCVU' },
+                { label: 'Discord',   url: 'https://discord.gg/U2qeUHqR' },
                 { label: 'GitHub',    url: 'https://github.com/OTUBlueprint' },
               ].map(s => (
                 <a key={s.label} href={s.url} target="_blank" rel="noreferrer"
