@@ -16,7 +16,7 @@ module.exports = async function handler(req, res) {
       headers: { 'Content-Type': 'application/json', 'api-key': apiKey },
       body: JSON.stringify({
         sender: { name: 'Blueprint OTU', email: 'hello@otublueprint.com' },
-        to: [{ email, name: name || '' }],
+        to: [{ email, name: name || email }],
         templateId,
         params: { to_name: name || 'there', to_email: email },
       }),
