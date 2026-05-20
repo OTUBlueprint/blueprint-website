@@ -43,6 +43,7 @@ module.exports = async function handler(req, res) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'api-key': apiKey },
       body: JSON.stringify({
+        sender: { name: 'Blueprint OTU', email: 'hello@otublueprint.com' },
         to: [{ email, name: name || '' }],
         templateId,
         params: { to_name: name || 'there', to_email: email },
