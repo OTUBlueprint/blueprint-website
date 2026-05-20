@@ -24,6 +24,7 @@ module.exports = async function handler(req, res) {
 
     const d = await r.json()
     console.log('Brevo response:', JSON.stringify(d))
+    console.log('templateId:', templateId, 'type:', type)
 
     if (!r.ok) return res.status(500).json({ error: 'Failed to send email' })
 
