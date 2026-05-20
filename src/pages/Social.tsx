@@ -77,7 +77,7 @@ export default function Social({ theme }: Props) {
     {
       name: 'Discord',
       handle: 'Join our server',
-      url: 'https://discord.gg/nxRccCVU',
+      url: 'https://discord.gg/U2qeUHqR',
       color: '#5865F2',
       icon: <DiscordIcon size={22} color="#5865F2" />,
       desc: 'Connect with Blueprint OTU members, get updates, and stay in the loop.',
