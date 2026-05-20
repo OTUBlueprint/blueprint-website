@@ -6,6 +6,8 @@ module.exports = async function handler(req, res) {
   if (!email) return res.status(400).json({ error: 'Missing email' })
 
   const apiKey = process.env.BREVO_API_KEY
+  console.log('API key starts with:', apiKey ? apiKey.substring(0, 10) : 'UNDEFINED')
+
   const templateId = type === 'careers'
     ? Number(process.env.BREVO_CAREERS_TEMPLATE)
     : Number(process.env.BREVO_NEWSLETTER_TEMPLATE)
@@ -14,7 +16,6 @@ module.exports = async function handler(req, res) {
     : Number(process.env.BREVO_NEWSLETTER_LIST)
 
   try {
-    // Check if contact already exists in list
     const checkRes = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`, {
       headers: { 'api-key': apiKey }
     })
@@ -26,7 +27,6 @@ module.exports = async function handler(req, res) {
       }
     }
 
-    // Add to list
     await fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'api-key': apiKey },
@@ -38,7 +38,6 @@ module.exports = async function handler(req, res) {
       }),
     })
 
-    // Send welcome email
     await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'api-key': apiKey },
