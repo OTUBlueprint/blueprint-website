@@ -17,7 +17,6 @@ const STATUS_LABEL = IS_OPEN ? 'Open Now' : 'Closed'
 const STATUS_COLOR = IS_OPEN ? '#4ade80' : '#f87171'
 const CLOSE_LABEL  = 'Closes July 1, 2026'
 
-
 const TEAM_OPTIONS = [
   { value: 'creative',    label: 'Creative & Media Team'     },
   { value: 'community',   label: 'Community & Outreach Team' },
@@ -52,6 +51,7 @@ export default function Apply({ theme }: Props) {
   const [mailType,  setMailType]  = useState<'newsletter'|'careers'>('newsletter')
   const [mailSent,  setMailSent]  = useState(false)
   const [mailError, setMailError] = useState<string | null>(null)
+  const [subscribedEmails, setSubscribedEmails] = useState<Set<string>>(new Set())
 
   const [openFaq, setFaq] = useState<number | null>(null)
 
@@ -144,21 +144,27 @@ export default function Apply({ theme }: Props) {
     resetForm()
   }
 
- async function submitMail() {
-  if (!mailEmail) return
-  setMailError(null)
+  async function submitMail() {
+    if (!mailEmail) return
+    setMailError(null)
 
-  try {
-    await subscribeNewsletter({ email: mailEmail, name: mailName, type: mailType })
-    setMailSent(true)
-  } catch (e: any) {
-    if (e.message === 'already_subscribed') {
+    if (subscribedEmails.has(mailEmail.toLowerCase())) {
       setMailError('You are already subscribed.')
-    } else {
-      setMailError('Something went wrong. Please try again.')
+      return
+    }
+
+    try {
+      await subscribeNewsletter({ email: mailEmail, name: mailName, type: mailType })
+      setSubscribedEmails(prev => new Set(prev).add(mailEmail.toLowerCase()))
+      setMailSent(true)
+    } catch (e: any) {
+      if (e.message === 'already_subscribed') {
+        setMailError('You are already subscribed.')
+      } else {
+        setMailError('Something went wrong. Please try again.')
+      }
     }
   }
-}
 
   const currentTeam = activeTeamObj || TEAMS.find(t => t.id === activeTeam)
 
@@ -230,7 +236,6 @@ export default function Apply({ theme }: Props) {
         {view === 'teams' && (
           <motion.div key="teams" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4, ease: [0.16,1,0.3,1] }}>
 
-            {/* Hero */}
             <section style={{ padding: '100px 52px 72px', position: 'relative', overflow: 'hidden' }}>
               <img src="/logo.webp" alt="" style={{ position: 'absolute', bottom: -60, right: -60, width: 480, height: 480, objectFit: 'contain', opacity: 0.05, pointerEvents: 'none' }} />
               <Reveal><Eyebrow dark={dark}>{IS_OPEN ? 'Applications Open · Fall 2026' : 'Applications Closed'}</Eyebrow></Reveal>
@@ -263,7 +268,6 @@ export default function Apply({ theme }: Props) {
               </Reveal>
             </section>
 
-            {/* Process steps */}
             <section style={{ padding: '0 52px 72px' }}>
               <Reveal><Eyebrow dark={dark}>How it works</Eyebrow></Reveal>
               <Reveal delay={40}>
@@ -288,7 +292,6 @@ export default function Apply({ theme }: Props) {
 
             <LineReveal color={t.bord} />
 
-            {/* Commitment */}
             <section style={{ padding: '64px 52px' }}>
               <Reveal>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 48, alignItems: 'start' }}>
@@ -313,7 +316,6 @@ export default function Apply({ theme }: Props) {
 
             <LineReveal color={t.bord} />
 
-            {/* Teams section */}
             <section id="teams-section" style={{ padding: '64px 0 80px' }}>
               <div style={{ padding: '0 52px', marginBottom: 32 }}>
                 <Reveal><Eyebrow dark={dark}>Open Roles</Eyebrow></Reveal>
@@ -325,8 +327,6 @@ export default function Apply({ theme }: Props) {
                     Expand a team to see open roles. Click View Qualifications to learn more, then Apply to submit.
                   </p>
                 </Reveal>
-
-                {/* Filters */}
                 <Reveal delay={100}>
                   <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 28 }}>
                     {[
@@ -343,15 +343,12 @@ export default function Apply({ theme }: Props) {
                     ))}
                   </div>
                 </Reveal>
-
-                {/* Info note */}
                 <div style={{ padding: '12px 16px', borderRadius: 8, background: t.surf, border: `1px solid ${t.bord}`, display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 24 }}>
                   <span style={{ color: C.blue, fontSize: '0.9rem', flexShrink: 0 }}>ℹ</span>
                   <span style={{ fontFamily: F.mono, fontSize: '0.72rem', color: t.fg2, lineHeight: 1.6, fontWeight: 400 }}>Qualifications are guidelines, not gates. If you have the drive but not every requirement, apply anyway.</span>
                 </div>
               </div>
 
-              {/* Team accordion */}
               <div style={{ borderTop: `1px solid ${t.bord}` }}>
                 {filteredTeams.length === 0 && (
                   <div style={{ padding: '48px 52px', textAlign: 'center', fontFamily: F.mono, fontSize: '0.8rem', color: t.fg3 }}>No teams match your filters.</div>
@@ -387,7 +384,6 @@ export default function Apply({ theme }: Props) {
                           {isOpen && (
                             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.45, ease: [0.16,1,0.3,1] }} style={{ overflow: 'hidden' }}>
-
                               <div style={{ padding: '0 52px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 2, borderBottom: `1px solid ${t.bord}` }}>
                                 {[['Experience', team.experience], ['Status', STATUS_LABEL], ['Commitment', team.commitment]].map(([k, v]) => (
                                   <div key={k} style={{ background: t.surf, border: `1px solid ${t.bord}`, borderRadius: 8, padding: '10px 14px' }}>
@@ -396,7 +392,6 @@ export default function Apply({ theme }: Props) {
                                   </div>
                                 ))}
                               </div>
-
                               <div style={{ padding: '16px 52px 20px', borderBottom: `1px solid ${t.bord}` }}>
                                 <div style={{ fontFamily: F.mono, fontSize: '0.56rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: t.fg3, marginBottom: 10 }}>Skills we look for</div>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
@@ -405,7 +400,6 @@ export default function Apply({ theme }: Props) {
                                   ))}
                                 </div>
                               </div>
-
                               <div>
                                 {team.roles.map((role, ri) => {
                                   const roleKey    = `${team.id}-${role.title}`
@@ -439,7 +433,6 @@ export default function Apply({ theme }: Props) {
                                           </button>
                                         </div>
                                       </motion.div>
-
                                       <AnimatePresence>
                                         {isRoleOpen && (
                                           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
@@ -495,7 +488,6 @@ export default function Apply({ theme }: Props) {
               </div>
             </section>
 
-            {/* FAQ */}
             <section style={{ padding: '64px 52px 80px', borderTop: `1px solid ${t.bord}` }}>
               <Reveal><Eyebrow dark={dark}>FAQ</Eyebrow></Reveal>
               <Reveal delay={40}>
@@ -522,7 +514,6 @@ export default function Apply({ theme }: Props) {
               ))}
             </section>
 
-            {/* Bottom CTA */}
             <section style={{ margin: '0 52px 80px', padding: '52px 48px', borderRadius: 16, background: C.blue, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
               <img src="/logo.webp" alt="" style={{ position: 'absolute', right: -40, top: '50%', transform: 'translateY(-50%)', width: 200, height: 200, objectFit: 'contain', opacity: 0.08, filter: 'brightness(10)', pointerEvents: 'none' }} />
               <div style={{ position: 'relative', zIndex: 1 }}>
@@ -565,9 +556,7 @@ export default function Apply({ theme }: Props) {
                 <span style={{ fontFamily: F.mono, fontSize: '0.62rem', color: t.fg3 }}>{currentTeam.commitment}</span>
               </div>
             </div>
-
             <LineReveal color={t.bord} />
-
             <div style={{ margin: '28px 0' }}>
               <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: t.fg3, marginBottom: 12 }}>Skills we look for</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -576,9 +565,7 @@ export default function Apply({ theme }: Props) {
                 ))}
               </div>
             </div>
-
             <LineReveal color={t.bord} />
-
             <div style={{ marginTop: 36 }}>
               <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: t.fg3, marginBottom: 20 }}>
                 Open roles — {currentTeam.roles.length} positions
@@ -664,11 +651,8 @@ export default function Apply({ theme }: Props) {
               <div style={{ fontFamily: F.clash, fontWeight: 700, fontSize: 'clamp(2.2rem,5vw,5rem)', lineHeight: 0.92, letterSpacing: '-0.04em', color: t.fg, marginBottom: 16 }}>{activeRole}</div>
               <span style={{ fontFamily: F.mono, fontSize: '0.62rem', color: STATUS_COLOR }}>{STATUS_LABEL}</span>
             </div>
-
             <LineReveal color={t.bord} />
-
             <form onSubmit={submitApp} style={{ marginTop: 48, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56 }}>
-              {/* Left column */}
               <div>
                 <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: t.fg3, marginBottom: 24 }}>Personal Information</div>
                 <input name="Full Name" placeholder="Full name" required style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
@@ -684,10 +668,9 @@ export default function Apply({ theme }: Props) {
                   onBlur={e => (e.currentTarget.style.borderBottomColor = fb)}
                 />
                 <input name="Program and Year" placeholder="Program and year" required style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
-                <input name="LinkedIn"  placeholder="LinkedIn (optional)"              style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
-                <input name="GitHub"    placeholder="GitHub (optional)"                style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
+                <input name="LinkedIn"  placeholder="LinkedIn (optional)"               style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
+                <input name="GitHub"    placeholder="GitHub (optional)"                 style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
                 <input name="Portfolio" placeholder="Portfolio or work link (optional)" style={IS} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
-
                 <div style={{ marginBottom: 28 }}>
                   <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: t.fg3, marginBottom: 8 }}>Resume (optional)</div>
                   <input
@@ -698,7 +681,6 @@ export default function Apply({ theme }: Props) {
                     onBlur={e => (e.currentTarget.style.borderBottomColor = fb)}
                   />
                 </div>
-
                 <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: t.fg3, marginBottom: 8 }}>Secondary preference (optional)</div>
                 <div style={{ fontFamily: F.mono, fontSize: '0.62rem', color: t.fg3, marginBottom: 10, lineHeight: 1.5 }}>Open to another team or role? Let us know.</div>
                 <select value={secondaryTeam} onChange={e => { setSecTeam(e.target.value); setSecRole('') }} style={{ ...SS, background: t.surf }}>
@@ -712,15 +694,12 @@ export default function Apply({ theme }: Props) {
                   </select>
                 )}
               </div>
-
-              {/* Right column */}
               <div>
                 <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: t.fg3, marginBottom: 24 }}>Written Responses</div>
                 <textarea name="Why Blueprint" rows={3} placeholder="Why do you want to join Blueprint OTU?" required style={{ ...IS, resize: 'none' }} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
                 <textarea name="Why this role" rows={3} placeholder={`Why are you applying for the ${activeRole} role?`} required style={{ ...IS, resize: 'none' }} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
                 <textarea name="Experience"    rows={3} placeholder="Describe a project or experience that shows how you work." required style={{ ...IS, resize: 'none' }} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
                 <textarea name="Tech for Good" rows={3} placeholder="What does technology for social good mean to you?" style={{ ...IS, resize: 'none' }} onFocus={e=>(e.currentTarget.style.borderBottomColor=C.blue)} onBlur={e=>(e.currentTarget.style.borderBottomColor=fb)} />
-
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ fontFamily: F.mono, fontSize: '0.64rem', color: t.fg3, marginBottom: 10 }}>Can you commit to approximately 8 hours per week?</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
@@ -732,7 +711,6 @@ export default function Apply({ theme }: Props) {
                     ))}
                   </div>
                 </div>
-
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ fontFamily: F.mono, fontSize: '0.64rem', color: t.fg3, marginBottom: 10 }}>Availability</div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -744,7 +722,6 @@ export default function Apply({ theme }: Props) {
                     ))}
                   </div>
                 </div>
-
                 <div style={{ marginBottom: 24 }}>
                   <div style={{ fontFamily: F.mono, fontSize: '0.64rem', color: t.fg3, marginBottom: 10 }}>Hours per week you can commit</div>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -756,7 +733,6 @@ export default function Apply({ theme }: Props) {
                     ))}
                   </div>
                 </div>
-
                 <div style={{ marginBottom: 20, padding: '16px 18px', background: t.surf, borderRadius: 10, border: `1px solid ${t.bord}` }}>
                   <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: t.fg3, marginBottom: 12 }}>Before you submit</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -772,7 +748,6 @@ export default function Apply({ theme }: Props) {
                     ))}
                   </div>
                 </div>
-
                 <div style={{ marginBottom: 24, padding: '14px 18px', background: C.blueDim, borderRadius: 10, border: `1px solid ${C.blueBorder}` }}>
                   <div style={{ fontFamily: F.mono, fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: C.blue, marginBottom: 10 }}>Stay in the loop</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -786,7 +761,6 @@ export default function Apply({ theme }: Props) {
                     </label>
                   </div>
                 </div>
-
                 <button type="submit" disabled={!confirm1 || !confirm2 || !confirm3}
                   style={{ width: '100%', fontFamily: F.syne, fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', background: confirm1 && confirm2 && confirm3 ? C.blue : t.bord, color: confirm1 && confirm2 && confirm3 ? '#fff' : t.fg3, padding: '14px', borderRadius: 10, border: 'none', transition: 'background 0.2s', marginBottom: 8 }}
                   onMouseEnter={e => { if (confirm1 && confirm2 && confirm3) (e.currentTarget as HTMLElement).style.background = C.blueMid }}
